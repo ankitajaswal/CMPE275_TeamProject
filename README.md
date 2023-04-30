@@ -1,2 +1,1 @@
-# CMPE275_TeamProject
-Term Project - WIORS
+# CMPE275 Term Project: WIORS
