@@ -1,3 +1,10 @@
 database/data
 target/*
 /target/
+
+#compiled class files
+*.class
+
+### VisualStudioCode ###
+.vscode/*
+
