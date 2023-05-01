@@ -1,1 +1,1 @@
-# CMPE275 Term Project: WIORS
+# CMPE275_Lab2
