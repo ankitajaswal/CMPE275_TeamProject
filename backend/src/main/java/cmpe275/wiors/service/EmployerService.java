@@ -1,7 +1,7 @@
-package cmpe275.lab2.service;
+package cmpe275.wiors.service;
 
-import cmpe275.lab2.entity.Employer;
-import cmpe275.lab2.repository.EmployerRepository;
+import cmpe275.wiors.entity.Employer;
+import cmpe275.wiors.repository.EmployerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

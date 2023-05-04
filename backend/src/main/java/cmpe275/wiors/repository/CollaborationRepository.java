@@ -1,7 +1,7 @@
-package cmpe275.lab2.repository;
+package cmpe275.wiors.repository;
 
-import cmpe275.lab2.entity.Collaboration;
-import cmpe275.lab2.entity.Employee;
+import cmpe275.wiors.entity.Collaboration;
+import cmpe275.wiors.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package cmpe275.lab2.entity;
+package cmpe275.wiors.entity;
 
 /**
  * This class represents the shallow form of Employee. Used for embedding in Employee objects.

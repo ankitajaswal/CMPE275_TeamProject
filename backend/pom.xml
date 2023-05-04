@@ -8,11 +8,11 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>cmpe275.lab2</groupId>
-	<artifactId>lab2</artifactId>
+	<groupId>cmpe275.wiors</groupId>
+	<artifactId>wiors</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lab2</name>
-	<description>Lab 2 for CMPE 275 section 1</description>
+	<name>wiors</name>
+	<description>WIORS project for CMPE 275 section 1</description>
 
 	<properties>
 		<java.version>1.8</java.version>

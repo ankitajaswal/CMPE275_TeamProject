@@ -1,10 +1,10 @@
-package cmpe275.lab2.service;
+package cmpe275.wiors.service;
 
-import cmpe275.lab2.entity.Collaboration;
-import cmpe275.lab2.entity.Employee;
-import cmpe275.lab2.entity.EmployeeDto;
-import cmpe275.lab2.repository.CollaborationRepository;
-import cmpe275.lab2.repository.EmployeeRepository;
+import cmpe275.wiors.entity.Collaboration;
+import cmpe275.wiors.entity.Employee;
+import cmpe275.wiors.entity.EmployeeDto;
+import cmpe275.wiors.repository.CollaborationRepository;
+import cmpe275.wiors.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

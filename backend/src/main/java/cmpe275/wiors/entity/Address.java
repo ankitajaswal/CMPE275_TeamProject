@@ -1,4 +1,4 @@
-package cmpe275.lab2.entity;
+package cmpe275.wiors.entity;
 
 import javax.persistence.Embeddable;
 

@@ -1,4 +1,4 @@
-package cmpe275.lab2.configuration;
+package cmpe275.wiors.configuration;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;

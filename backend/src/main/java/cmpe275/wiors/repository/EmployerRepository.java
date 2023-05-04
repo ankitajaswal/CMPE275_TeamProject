@@ -1,6 +1,6 @@
-package cmpe275.lab2.repository;
+package cmpe275.wiors.repository;
 
-import cmpe275.lab2.entity.Employer;
+import cmpe275.wiors.entity.Employer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

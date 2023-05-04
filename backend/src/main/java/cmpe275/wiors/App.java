@@ -1,10 +1,10 @@
-package cmpe275.lab2;
+package cmpe275.wiors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Main class for cmpe275 lab2 employee app
+ * Main class for cmpe275 wiors employee attendance and seat reservation app
  */
 @SpringBootApplication
 public class App {

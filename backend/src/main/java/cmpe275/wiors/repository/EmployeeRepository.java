@@ -1,8 +1,7 @@
-package cmpe275.lab2.repository;
+package cmpe275.wiors.repository;
 
-import cmpe275.lab2.entity.Employee;
-import cmpe275.lab2.entity.EmployeeDto;
-import cmpe275.lab2.entity.EmployeeId;
+import cmpe275.wiors.entity.Employee;
+import cmpe275.wiors.entity.EmployeeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;

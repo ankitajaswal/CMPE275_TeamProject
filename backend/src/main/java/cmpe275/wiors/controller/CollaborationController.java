@@ -1,11 +1,11 @@
-package cmpe275.lab2.controller;
+package cmpe275.wiors.controller;
 
-import cmpe275.lab2.entity.Employer;
-import cmpe275.lab2.entity.Employee;
-import cmpe275.lab2.entity.Collaboration;
-import cmpe275.lab2.service.EmployerService;
-import cmpe275.lab2.service.EmployeeService;
-import cmpe275.lab2.service.CollaborationService;
+import cmpe275.wiors.entity.Employer;
+import cmpe275.wiors.entity.Employee;
+import cmpe275.wiors.entity.Collaboration;
+import cmpe275.wiors.service.EmployerService;
+import cmpe275.wiors.service.EmployeeService;
+import cmpe275.wiors.service.CollaborationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
