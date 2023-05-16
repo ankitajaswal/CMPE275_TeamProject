@@ -6,6 +6,7 @@ import CalendarComponent from './components/CalendarComponent';
 import Register from './components/RegisterComponent';
 import Login from './components/LoginComponent';
 import CSVImporterComponent from './components/CSVImporterComponent';
+import SeatReservation from './components/SeatReservationComponent';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           < Route path='/calendar' element={<CalendarComponent />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/seatreservation' element={<SeatReservation />} />
           <Route path='/bulk' element={<CSVImporterComponent />} />
 
       </Routes>

@@ -26,6 +26,11 @@ function NavBar() {
             Bulk
           </Link>
         </li>
+        <li className='nav-item'>
+          <Link to='/seatreservation' className='nav-link'>
+            Seat Reservation
+          </Link>
+        </li>
       </ul>
     </nav>
   );
