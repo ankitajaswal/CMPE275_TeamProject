@@ -5,6 +5,7 @@ import HomeComponent from './components/HomeComponent';
 import CalendarComponent from './components/CalendarComponent';
 import Register from './components/RegisterComponent';
 import Login from './components/LoginComponent';
+import CSVImporterComponent from './components/CSVImporterComponent';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
           < Route path='/calendar' element={<CalendarComponent />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/bulk' element={<CSVImporterComponent />} />
+
       </Routes>
 
       </div>
