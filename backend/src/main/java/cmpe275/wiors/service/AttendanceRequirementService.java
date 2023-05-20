@@ -26,4 +26,15 @@ public class AttendanceRequirementService {
         return repository.save(r);
     }
 
+    public void setEmployerAttendanceRequirement(AttendanceRequirement r) {
+        AttendanceRequirement existing = repository.getEmployerRequirement(r.getEmployer().getId());
+        if (existing != null) {
+            r.setId(existing.getId());
+        }
+        repository.save(r);
+    }
+
+    public AttendanceRequirement getAttendanceRequirementForEmployer(String employerId) {
+        return repository.getEmployerRequirement(employerId);
+    }
 }

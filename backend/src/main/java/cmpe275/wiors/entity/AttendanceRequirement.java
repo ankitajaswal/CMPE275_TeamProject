@@ -36,6 +36,9 @@ public class AttendanceRequirement {
     @Column
     private int numberOfDays;
 
+    @Column
+    private boolean isEmployerRule;
+
     // only applicable is isGetTogetherDay is true
     private DayOfWeek dayOfWeek;
 
@@ -98,6 +101,14 @@ public class AttendanceRequirement {
 
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
+    }
+
+    public void setIsEmployerRule(boolean isEmployerRule) {
+        this.isEmployerRule = isEmployerRule;
+    }
+
+    public boolean isEmployerRule() {
+        return isEmployerRule;
     }
 }
 

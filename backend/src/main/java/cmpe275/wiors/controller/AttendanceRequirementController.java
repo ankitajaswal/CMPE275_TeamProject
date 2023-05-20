@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +45,7 @@ public class AttendanceRequirementController {
             MediaType.APPLICATION_XML_VALUE
         }
     )
-	public ResponseEntity<?> createEmployer(
+	public ResponseEntity<?> createRequirement(
         @RequestParam(value = "employer", required = true) String employer,
         @RequestParam(value = "creator", required = true) Long creator,
         @RequestParam(value = "isGetTogetherDay", required = false, defaultValue = "false") boolean isGetTogetherDay,
@@ -56,7 +56,7 @@ public class AttendanceRequirementController {
         AttendanceRequirement req = new AttendanceRequirement();
         Employer employerObj = employerService.getEmployerById(employer);
         if (!validStr(employer) || employerObj == null) {
-            return new ResponseEntity<>("Invalid employer name", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid employer ID", HttpStatus.BAD_REQUEST);
         }
         req.setEmployer(employerService.getEmployerById(employer));
         Employee creatorEmp = employeeService.getEmployee(creator);
@@ -66,6 +66,7 @@ public class AttendanceRequirementController {
         req.setCreator(creatorEmp);
         req.setIsGetTogetherDay(isGetTogetherDay);
         req.setNumberOfDays(numberOfDays);
+        req.setIsEmployerRule(false);
         if (isGetTogetherDay && dayOfWeek == null) {
             return new ResponseEntity<>("If isGetTogetherDay is true, dayOfWeek must be an Integer in [1,5]",
                     HttpStatus.BAD_REQUEST);
@@ -87,6 +88,56 @@ public class AttendanceRequirementController {
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
         return ResponseEntity.ok().contentType(contentType).body(created.toDto());
 	}
+
+    @Transactional
+	@RequestMapping(
+        value = "/requirement/employer/{employerId}",
+        method = RequestMethod.POST
+    )
+	public ResponseEntity<?> setEmployerRequirement(
+        @PathVariable String employerId,
+        @RequestParam(value = "numberOfDays", required = true) Integer numberOfDays
+    ) {
+        AttendanceRequirement req = new AttendanceRequirement();
+        Employer employer = employerService.getEmployerById(employerId);
+        if (!validStr(employerId) || employer == null) {
+            return new ResponseEntity<>("Invalid employer ID", HttpStatus.NOT_FOUND);
+        }
+
+        req.setEmployer(employer);
+        req.setNumberOfDays(numberOfDays);
+        req.setIsEmployerRule(true);
+
+        service.setEmployerAttendanceRequirement(req);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+    @Transactional
+    @RequestMapping(
+        value = "/requirement/employer/{employerId}",
+        method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getEmployerAttendanceRequirement(@PathVariable String employerId) {
+        if (employerService.getEmployerById(employerId) == null) {
+            return new ResponseEntity<>("Invalid employer ID", HttpStatus.NOT_FOUND);
+        }
+        AttendanceRequirement r = service.getAttendanceRequirementForEmployer(employerId);
+        int days = 0;
+        if (r != null) {
+            days = r.getNumberOfDays();
+        }
+        return new ResponseEntity<>(days, HttpStatus.OK);
+    }
+
+    @Transactional
+    @RequestMapping(
+        value = "/requirement/employee/{employeeId}",
+        method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getEmployeeAttendanceRequirement(@PathVariable long employeeId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
 
     private boolean validStr(String str) {
         return str != null && !str.isEmpty();
