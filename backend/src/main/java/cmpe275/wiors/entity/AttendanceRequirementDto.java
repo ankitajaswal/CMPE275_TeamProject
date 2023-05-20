@@ -11,46 +11,18 @@ import javax.persistence.JoinColumn;
 import java.time.DayOfWeek;
 
 /**
- * This class represent employers. It persists as an entity in the datasource.
+ * This class represent the shallow form of attendance requirements. 
  */
-@Entity
-@Table(name = "attendancerequirements")
-public class AttendanceRequirement {
+public class AttendanceRequirementDto {
 
-    @Id
-    @GeneratedValue
     private long id;
-
-    @ManyToOne()
-    @JoinColumn(name = "employer", referencedColumnName = "id", nullable = false)
-    private Employer employer;
-
-    @ManyToOne()
-    @JoinColumn(name = "creator", referencedColumnName = "id", nullable = true)
-    private Employee creator;
-
-    @Column
+    private String employer;
+    private long creator;
     private boolean isGetTogetherDay;
-
-    // in [1,5]
-    @Column
     private int numberOfDays;
-
-    // only applicable is isGetTogetherDay is true
     private DayOfWeek dayOfWeek;
 
-    public AttendanceRequirement() {}
-
-    public AttendanceRequirementDto toDto() {
-        AttendanceRequirementDto r = new AttendanceRequirementDto();
-        r.setId(id);
-        r.setEmployer(employer.getId());
-        r.setCreator(creator.getId());
-        r.setNumberOfDays(numberOfDays);
-        r.setIsGetTogetherDay(isGetTogetherDay);
-        r.setDayOfWeek(dayOfWeek);
-        return r;
-    }
+    public AttendanceRequirementDto() {}
 
     public void setId(long id) {
         this.id = id;
@@ -60,19 +32,19 @@ public class AttendanceRequirement {
         return id;
     }
 
-    public void setEmployer(Employer employer) {
+    public void setEmployer(String employer) {
         this.employer = employer;
     }
 
-    public Employer getEmployer() {
+    public String getEmployer() {
         return employer;
     }
 
-    public void setCreator(Employee creator) {
+    public void setCreator(long creator) {
         this.creator = creator;
     }
 
-    public Employee getCreator() {
+    public long getCreator() {
         return creator;
     }
 

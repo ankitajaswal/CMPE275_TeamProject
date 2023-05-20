@@ -85,7 +85,7 @@ public class AttendanceRequirementController {
 
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
-        return ResponseEntity.ok().contentType(contentType).body(created);
+        return ResponseEntity.ok().contentType(contentType).body(created.toDto());
 	}
 
     private boolean validStr(String str) {
