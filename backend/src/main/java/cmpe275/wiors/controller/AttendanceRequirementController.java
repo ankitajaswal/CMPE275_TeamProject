@@ -69,7 +69,7 @@ public class AttendanceRequirementController {
         if (isGetTogetherDay && dayOfWeek == null) {
             return new ResponseEntity<>("If isGetTogetherDay is true, dayOfWeek must be an Integer in [1,5]",
                     HttpStatus.BAD_REQUEST);
-        } else if (dayOfWeek != null) { // not get together day
+        } else if (dayOfWeek != null) { // could be null if isGetTogetherDay is false
             req.setDayOfWeek(DayOfWeek.of(dayOfWeek));
         }
 
