@@ -3,6 +3,7 @@ package cmpe275.wiors.service;
 import cmpe275.wiors.entity.AttendanceRequirement;
 import cmpe275.wiors.entity.Employee;
 import cmpe275.wiors.repository.AttendanceRequirementRepository;
+import cmpe275.wiors.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class AttendanceRequirementService {
     @Autowired
     private AttendanceRequirementRepository repository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     /**
      * Persists attendance requirement
      *
@@ -24,7 +28,20 @@ public class AttendanceRequirementService {
      * @return persisted attendance requirement
      */
     public AttendanceRequirement createAttendanceRequirement(AttendanceRequirement r) {
-        return repository.save(r);
+        System.out.println(r.getCreator().getId());
+        AttendanceRequirement t = repository.getAttendanceRequirementByCreator(r.getCreator().getId());
+
+        AttendanceRequirement used, existing = repository.findById(t.getId());
+        if (existing != null) {
+            existing.setIsGetTogetherDay(r.isGetTogetherDay());
+            existing.setNumberOfDays(r.getNumberOfDays());
+            existing.setIsEmployerRule(r.isEmployerRule());
+            existing.setDayOfWeek(r.getDayOfWeek());
+            used = existing;
+        } else {
+            used = r;
+        }
+        return repository.save(used);
     }
 
     public void setEmployerAttendanceRequirement(AttendanceRequirement r) {
@@ -33,6 +50,10 @@ public class AttendanceRequirementService {
             r.setId(existing.getId());
         }
         repository.save(r);
+    }
+
+    public AttendanceRequirement getAttendanceRequirementByCreator(long id) {
+        return repository.getAttendanceRequirementByCreator(id);
     }
 
     public AttendanceRequirement getAttendanceRequirementForEmployer(String employerId) {
@@ -55,4 +76,16 @@ public class AttendanceRequirementService {
         return mop;
     }
     
+    public void adjustMops(Long employeeId, int mop) {
+        if (employeeId == null) return;
+        Employee e = employeeRepository.findById(employeeId).orElse(null);
+        if (e == null) return;
+        if (mop > e.getMop()) {
+            e.setMop(mop);
+            employeeRepository.save(e);
+        }
+        for (Employee te: employeeRepository.findAllByManagerId(employeeId)) {
+            adjustMops(te.getId(), mop);
+        }
+    }
 }

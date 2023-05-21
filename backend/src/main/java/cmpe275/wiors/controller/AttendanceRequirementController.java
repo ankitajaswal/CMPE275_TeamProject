@@ -81,8 +81,14 @@ public class AttendanceRequirementController {
         if (isGetTogetherDay && (dayOfWeek < 1 || dayOfWeek > 5)) {
             return new ResponseEntity<>("dayOfWeek must be in [1,5]", HttpStatus.BAD_REQUEST);
         }
-
+        
+        int mop = employeeService.getEmployee(creator).getMop();
+        if (mop > numberOfDays && !isGetTogetherDay) {
+            return new ResponseEntity<>("numberOfDays must be greater than or equal to creator's MOP",
+                HttpStatus.BAD_REQUEST);
+        }
         AttendanceRequirement created = service.createAttendanceRequirement(req);
+        service.adjustMops(creator, mop);
 
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
