@@ -107,7 +107,6 @@ public class AttendanceRequirementController {
         req.setEmployer(employer);
         req.setNumberOfDays(numberOfDays);
         req.setIsEmployerRule(true);
-
         service.setEmployerAttendanceRequirement(req);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -136,7 +135,11 @@ public class AttendanceRequirementController {
         method = RequestMethod.GET
     )
     public ResponseEntity<?> getEmployeeAttendanceRequirement(@PathVariable long employeeId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Employee emp = employeeService.getEmployee(employeeId);
+        if (emp == null) {
+            return new ResponseEntity<>("Invalid employee ID", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(employeeService.getEmployee(employeeId).getMop(), HttpStatus.OK);
     }
 
     private boolean validStr(String str) {

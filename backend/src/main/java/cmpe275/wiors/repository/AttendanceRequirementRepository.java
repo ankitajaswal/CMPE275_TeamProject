@@ -10,8 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface AttendanceRequirementRepository extends JpaRepository<AttendanceRequirement, Long> {
 
     @Query(
-        value = "SELECT * FROM attendancerequirements WHERE employerId = :id and isEmployerRule = 'true'",
+        value = "SELECT * FROM attendancerequirements WHERE employer = :id and is_employer_rule = true",
         nativeQuery = true
     )
     public AttendanceRequirement getEmployerRequirement(String id);
+
+    public AttendanceRequirement getAttendanceRequirementByCreator(long id);
 }

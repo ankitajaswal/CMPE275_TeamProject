@@ -1,6 +1,7 @@
 package cmpe275.wiors.service;
 
 import cmpe275.wiors.entity.AttendanceRequirement;
+import cmpe275.wiors.entity.Employee;
 import cmpe275.wiors.repository.AttendanceRequirementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +38,21 @@ public class AttendanceRequirementService {
     public AttendanceRequirement getAttendanceRequirementForEmployer(String employerId) {
         return repository.getEmployerRequirement(employerId);
     }
+
+    public int calculateMop(String employerId, Long managerId) {
+        int mop = 0;
+        AttendanceRequirement empReq = repository.getEmployerRequirement(employerId);
+        if (empReq != null) {
+            mop = empReq.getNumberOfDays();
+        }
+        AttendanceRequirement mgrReq = null;
+        if (managerId != null) {
+            repository.getAttendanceRequirementByCreator(managerId);
+        }
+        if (mgrReq != null && mgrReq.getNumberOfDays() > mop) {
+            mop = mgrReq.getNumberOfDays();
+        }
+        return mop;
+    }
+    
 }

@@ -6,6 +6,7 @@ import cmpe275.wiors.entity.Employer;
 import cmpe275.wiors.entity.Address;
 import cmpe275.wiors.service.EmployeeService;
 import cmpe275.wiors.service.EmployerService;
+import cmpe275.wiors.service.AttendanceRequirementService;
 import cmpe275.wiors.service.CollaborationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,9 @@ public class EmployeeController {
 
     @Autowired
     private CollaborationService collaborationService;
+
+    @Autowired
+    private AttendanceRequirementService attendanceRequirementService;
 
     /**
      * Endpoint handler for creating employees.
@@ -96,6 +100,9 @@ public class EmployeeController {
         employee.setEmail(email);
         employee.setTitle(title);
         employee.setAddress(new Address(street, city, state, zip));
+
+        System.out.println(attendanceRequirementService);
+        employee.setMop(attendanceRequirementService.calculateMop(employerId, null));
 
         Employee newEmployee = employeeService.createEmployee(employee);
         newEmployee.setEmployer(employer.toDto());

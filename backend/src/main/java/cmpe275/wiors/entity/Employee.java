@@ -50,6 +50,9 @@ public class Employee {
     @XmlTransient
     private Long managerId;
 
+    @Column
+    private int mop;
+
     @Transient
     private EmployerDto employer;
 
@@ -165,5 +168,13 @@ public class Employee {
 
     public List<EmployeeDto> getCollaborators() {
         return collaborators;
+    }
+
+    public void setMop(int mop) {
+        this.mop = mop;
+    }
+
+    public int getMop() {
+        return mop;
     }
 }
