@@ -82,12 +82,12 @@ public class ReservationController {
     public List<Reservation> getAllReservations(
         @PathVariable String employerId
     ) {
-        return getAllReservations(employerId);
+        return reservationService.getAllReservations(employerId);
     }
 
 
     /**
-     *  Get reservation by id in an employer's org
+     * Get reservation by id in an employer's org
      * @param employerId
      * @param reservationId
      * @return
@@ -102,10 +102,15 @@ public class ReservationController {
         @PathVariable String employerId,
         @PathVariable Long reservationId
     ) {
-        return getReservationById(employerId, reservationId);
+        return reservationService.getReservationById(employerId, reservationId);
     }
 
 
+    /**
+     * Delete reservation by id in an employer's org
+     * @param employerId
+     * @param reservtionId
+     */
     @Transactional
     @RequestMapping(
         value = "/deleteReservationById/{employerId}/{reservationId}",
