@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/register.css';
 
 function Register() {
@@ -16,7 +16,20 @@ function Register() {
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
   const [role, setRole] = useState('employee');
+  const [statusCode, setStatusCode] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
+  useEffect(() => {
+      if (errorMsg) {
+          if (statusCode === 400) {
+              window.confirm(errorMsg);
+          } else if (statusCode === 404) {
+              window.confirm("Not found");
+          }
+          setErrorMsg(null);
+          setStatusCode(null);
+      }
+  }, [statusCode, errorMsg]);
   const handleSubmit = (event) => {
     event.preventDefault();
     let url = global.config.url;
@@ -51,7 +64,7 @@ function Register() {
     if (zip !== "") {
         url += "&zip=" + zip;
     }
-    console.log(encodeURI(url));
+
     let iterator = fetch(url, {
         method: "POST",
         headers: {
@@ -59,9 +72,12 @@ function Register() {
         }
     });
     iterator
-        .then(res => res.json())
+        .then(res => {
+            setStatusCode(res.status);
+            return res.json();
+        })
         .then(dat => {
-            console.log(dat);
+            setErrorMsg(dat.msg);
         })
         .catch(error => {
             console.log(error);
