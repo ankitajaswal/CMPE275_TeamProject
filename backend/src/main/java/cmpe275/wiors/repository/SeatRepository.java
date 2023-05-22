@@ -33,4 +33,11 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     Seat findByEmployerIdAndId(String employerId, Long id);
 
 
+    /**
+     * Delete all seats by employerId
+     * @param employerId
+     */
+    void deleteAllByEmployeeId(String employerId);
+
+
 }
