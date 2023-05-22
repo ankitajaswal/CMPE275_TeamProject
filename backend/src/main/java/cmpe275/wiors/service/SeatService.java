@@ -107,6 +107,6 @@ public class SeatService {
      * @param ownerId
      */
     public void deleteAllSeats(String ownerId) {
-        seatRepo.deleteAllByEmployeeId(ownerId);
+        seatRepo.deleteAllByEmployerId(ownerId);
     }
 }
