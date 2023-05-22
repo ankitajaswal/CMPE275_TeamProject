@@ -2,11 +2,21 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/seatreservation.css';
+import SeatingCapacityInput from './SeatingCapacityInput';
 
 function SeatReservation() {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
+  const [seatingCapacity, setSeatingCapacity] = useState(3);
+
+
+  const handleSeatingCapacityChange = (value) => {
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue) && parsedValue >= 3 && parsedValue <= 100) {
+      setSeatingCapacity(parsedValue);
+    }
+  };
 
   const handleDateChange = (date) => {
     if (!selectedStartDate) {
@@ -85,6 +95,9 @@ function SeatReservation() {
 
   return (
     <>
+
+      {/* Render the Calendar component */}
+
       <div className='calendar-container' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Calendar onChange={handleDateChange} value={selectedStartDate || selectedEndDate} tileContent={highlightSelectedDates} />
       </div>
@@ -103,6 +116,11 @@ function SeatReservation() {
           {' '}
           {selectedDates.map((date) => date.toDateString()).join(', ')}
         </p>
+      </div>
+
+      {/* Render the SeatingCapacityInput component */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <SeatingCapacityInput onChange={handleSeatingCapacityChange} />
       </div>
     </>
   );
