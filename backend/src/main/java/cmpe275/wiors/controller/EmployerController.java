@@ -68,16 +68,16 @@ public class EmployerController {
     ) {
         Employer e = new Employer();
         if (!validStr(name) || service.employerWithNameExists(name)) {
-            return new ResponseEntity<>("Missing, duplicate, or invalid name", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing, duplicate, or invalid name\"}", HttpStatus.BAD_REQUEST);
         }
         if (!validStr(email)) {
-            return new ResponseEntity<>("Missing or invalid email", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid email\"}", HttpStatus.BAD_REQUEST);
         }
         if (!validStr(password)) {
-            return new ResponseEntity<>("Missing or invalid password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid password\"}", HttpStatus.BAD_REQUEST);
         }
         if (service.getEmployerByEmail(email) != null || employeeService.getEmployeeByEmail(email) != null) {
-            return new ResponseEntity<>("Duplicate email", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Duplicate email\"}", HttpStatus.BAD_REQUEST);
         }
         e.setName(name);
         if (!validStr(id)) {

@@ -80,19 +80,19 @@ public class EmployeeController {
     ) {
         Employer employer = employerService.getEmployerById(employerId);
         if (employerId == null || employer == null) {
-            return new ResponseEntity<>("EmployerId is invalid", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("{\"msg\":\"EmployerId is invalid\"}", HttpStatus.NOT_FOUND);
         }
         if (!validStr(name)) {
-            return new ResponseEntity<>("Missing or invalid name", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid name\"}", HttpStatus.BAD_REQUEST);
         }
         if (!validStr(email)) {
-            return new ResponseEntity<>("Missing or invalid email", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid email\"}", HttpStatus.BAD_REQUEST);
         }
         if (!validStr(password)) {
-            return new ResponseEntity<>("Missing or invalid password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid password\"}", HttpStatus.BAD_REQUEST);
         }
         if (employerService.getEmployerByEmail(email) != null || employeeService.getEmployeeByEmail(email) != null) {
-            return new ResponseEntity<>("Duplicate email", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Duplicate email\"}", HttpStatus.BAD_REQUEST);
         }
 
         Employee employee = new Employee();
@@ -100,10 +100,10 @@ public class EmployeeController {
         if (managerId != null) {
             manager = employeeService.getEmployeeDto(managerId);
             if (manager == null) {
-                return new ResponseEntity<>("Invalid managerId", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("{\"msg\":\"Invalid managerId\"}", HttpStatus.NOT_FOUND);
             }
             if (!manager.getEmployerId().equals(employerId)) {
-                return new ResponseEntity<>("Manager must belong to employee's employer", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("{\"msg\":\"Manager must belong to employee's employer\"}", HttpStatus.BAD_REQUEST);
             }
             employee.setManagerId(managerId);
         }

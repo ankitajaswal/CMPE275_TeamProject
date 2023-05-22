@@ -48,7 +48,7 @@ public class UserController {
         if (isEmployer) {
             Employer employer = employerService.getEmployerByEmail(email);
             if (employer == null) {
-                return new ResponseEntity<>("email is invalid", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("{\"msg\":\"email is invalid\"}", HttpStatus.NOT_FOUND);
             }
             if (!employer.getPassword().equals(password)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -57,7 +57,7 @@ public class UserController {
         } else {
             Employee employee = employeeService.getEmployeeByEmail(email);
             if (employee == null) {
-                return new ResponseEntity<>("email is invalid", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("{\"msg\":\"email is invalid\"}", HttpStatus.NOT_FOUND);
             }
             if (!employee.getPassword().equals(password)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
