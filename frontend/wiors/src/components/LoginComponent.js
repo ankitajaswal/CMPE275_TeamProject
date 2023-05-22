@@ -2,13 +2,33 @@ import React, { useState } from 'react';
 import '../styles/login.css';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('employee');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Username: ${username}\nPassword: ${password}\nRole: ${role}`);
+    let url = global.config.url + "login?";
+    url += "email=" + email
+        + "&password=" + password;
+    if (role === "employer") {
+        url += "&isEmployer=true";
+    }
+    let iterator = fetch(url, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json"
+        }
+    });
+    iterator
+        .then(res => res.json())
+        .then(dat => {
+            console.log(dat);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    console.log(`Email: ${email}\nPassword: ${password}\nRole: ${role}`);
     // handle form submission here
   };
 
@@ -16,12 +36,12 @@ function Login() {
     <div className='login-form'>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor='username'>Username:</label>
+        <label htmlFor='email'>Email:</label>
         <input
           type='text'
-          id='username'
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          id='email'
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
         <label htmlFor='password'>Password:</label>
         <input

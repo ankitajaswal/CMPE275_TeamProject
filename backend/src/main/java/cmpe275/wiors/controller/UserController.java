@@ -62,6 +62,7 @@ public class UserController {
             if (!employee.getPassword().equals(password)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
+            user.setEmployerId(employee.getEmployerId());
             user.setEmployeeId(employee.getId());
         }
 
