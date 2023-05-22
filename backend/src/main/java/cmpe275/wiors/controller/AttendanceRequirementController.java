@@ -148,6 +148,19 @@ public class AttendanceRequirementController {
         return new ResponseEntity<>(employeeService.getEmployee(employeeId).getMop(), HttpStatus.OK);
     }
 
+    @Transactional
+    @RequestMapping(
+        value = "/requirement/employee/{employeeId}/gtd",
+        method = RequestMethod.GET
+    )
+    public ResponseEntity<?> getEmployeeGtds(@PathVariable long employeeId) {
+        Employee emp = employeeService.getEmployee(employeeId);
+        if (emp == null) {
+            return new ResponseEntity<>("Invalid employee ID", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(service.getEmployeeGtds(emp), HttpStatus.OK);
+    }
+
     private boolean validStr(String str) {
         return str != null && !str.isEmpty();
     }

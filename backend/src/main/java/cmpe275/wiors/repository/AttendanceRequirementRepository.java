@@ -16,10 +16,11 @@ public interface AttendanceRequirementRepository extends JpaRepository<Attendanc
     public AttendanceRequirement getEmployerRequirement(String id);
 
     @Query(
-        value = "SELECT * FROM attendancerequirements WHERE creator = :id",
+        value = "SELECT * FROM attendancerequirements WHERE creator = :id and is_get_together_day = :isgtd",
         nativeQuery = true
     )
-    public AttendanceRequirement getAttendanceRequirementByCreator(long id);
+    public AttendanceRequirement getAttendanceRequirementByCreator(long id, boolean isgtd);
 
     public AttendanceRequirement findById(long id);
+
 }

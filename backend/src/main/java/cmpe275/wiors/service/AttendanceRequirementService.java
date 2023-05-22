@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -28,8 +29,7 @@ public class AttendanceRequirementService {
      * @return persisted attendance requirement
      */
     public AttendanceRequirement createAttendanceRequirement(AttendanceRequirement r) {
-        System.out.println(r.getCreator().getId());
-        AttendanceRequirement t = repository.getAttendanceRequirementByCreator(r.getCreator().getId());
+        AttendanceRequirement t = repository.getAttendanceRequirementByCreator(r.getCreator().getId(), r.isGetTogetherDay());
 
         AttendanceRequirement used, existing = repository.findById(t.getId());
         if (existing != null) {
@@ -52,8 +52,8 @@ public class AttendanceRequirementService {
         repository.save(r);
     }
 
-    public AttendanceRequirement getAttendanceRequirementByCreator(long id) {
-        return repository.getAttendanceRequirementByCreator(id);
+    public AttendanceRequirement getAttendanceRequirementByCreator(long id, boolean isGtd) {
+        return repository.getAttendanceRequirementByCreator(id, isGtd);
     }
 
     public AttendanceRequirement getAttendanceRequirementForEmployer(String employerId) {
@@ -68,7 +68,7 @@ public class AttendanceRequirementService {
         }
         AttendanceRequirement mgrReq = null;
         if (managerId != null) {
-            repository.getAttendanceRequirementByCreator(managerId);
+            mgrReq = repository.getAttendanceRequirementByCreator(managerId, false);
         }
         if (mgrReq != null && mgrReq.getNumberOfDays() > mop) {
             mop = mgrReq.getNumberOfDays();
@@ -87,5 +87,20 @@ public class AttendanceRequirementService {
         for (Employee te: employeeRepository.findAllByManagerId(employeeId)) {
             adjustMops(te.getId(), mop);
         }
+    }
+
+    public List<AttendanceRequirement> getEmployeeGtds(Employee e) {
+        List<AttendanceRequirement> reqs = new ArrayList<>();
+        if (e.getManagerId() != null) {
+            AttendanceRequirement mgrGtd = repository.getAttendanceRequirementByCreator(e.getManagerId(), true);
+            if (mgrGtd != null) {
+                reqs.add(mgrGtd);
+            }
+        }
+        AttendanceRequirement eGtd = repository.getAttendanceRequirementByCreator(e.getId(), true);
+        if (eGtd != null) {
+            reqs.add(eGtd);
+        }
+        return reqs;
     }
 }
