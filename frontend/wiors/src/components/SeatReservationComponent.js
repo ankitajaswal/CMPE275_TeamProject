@@ -120,7 +120,7 @@ function SeatReservation() {
 
       {/* Render the SeatingCapacityInput component */}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <SeatingCapacityInput onChange={handleSeatingCapacityChange} />
+        <SeatingCapacityInput onChange={handleSeatingCapacityChange} defaultValue={seatingCapacity} />
       </div>
     </>
   );
