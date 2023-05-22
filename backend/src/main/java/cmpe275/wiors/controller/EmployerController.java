@@ -34,6 +34,8 @@ public class EmployerController {
      *
      * @param id optional query parameter, id of employer. If not provided, creates one automatically
      * @param name required query parameter, name of employer
+     * @param email required query parameter, email of employee
+     * @param password required query parameter, password of employee
      * @param description optional query parameter, description of employer
      * @param street optional query parameter, street of employer's address
      * @param city optional query parameter, city of employer's address
@@ -55,6 +57,8 @@ public class EmployerController {
 	public ResponseEntity<?> createEmployer(
         @RequestParam(value = "id", required = false) String id,
         @RequestParam(value = "name", required = true) String name,
+        @RequestParam(value = "email", required = true) String email,
+        @RequestParam(value = "password", required = true) String password,
         @RequestParam(value = "description", required = false) String description,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,
@@ -66,6 +70,15 @@ public class EmployerController {
         if (!validStr(name) || service.employerWithNameExists(name)) {
             return new ResponseEntity<>("Missing, duplicate, or invalid name", HttpStatus.BAD_REQUEST);
         }
+        if (!validStr(email)) {
+            return new ResponseEntity<>("Missing or invalid email", HttpStatus.BAD_REQUEST);
+        }
+        if (!validStr(password)) {
+            return new ResponseEntity<>("Missing or invalid password", HttpStatus.BAD_REQUEST);
+        }
+        if (service.getEmployerByEmail(email) != null || employeeService.getEmployeeByEmail(email) != null) {
+            return new ResponseEntity<>("Duplicate email", HttpStatus.BAD_REQUEST);
+        }
         e.setName(name);
         if (!validStr(id)) {
             e.setId(service.createIdFromName(name));
@@ -74,6 +87,8 @@ public class EmployerController {
         }
         e.setDescription(description);
         e.setAddress(new Address(street, city, state, zip));
+        e.setEmail(email);
+        e.setPassword(password);
 
         Employer employer = service.createEmployer(e);
 

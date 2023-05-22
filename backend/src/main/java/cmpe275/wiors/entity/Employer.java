@@ -5,6 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Embedded;
 import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class represent employers. It persists as an entity in the datasource.
@@ -25,6 +27,14 @@ public class Employer {
 
     @Embedded
     private Address address;
+
+    @Column
+    @JsonIgnore
+    @XmlTransient
+    private String password;
+
+    @Column
+    private String email;
 
     public Employer() {}
 
@@ -71,5 +81,21 @@ public class Employer {
 
     public Address getAddress() {
         return address;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
