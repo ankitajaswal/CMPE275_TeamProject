@@ -49,6 +49,17 @@ public class SeatService {
 
 
     /**
+     * get a single seat
+     * @param ownerId
+     * @param seatId
+     * @return a seat object by id
+     */
+    public Seat getSeatByEmployerAndId(String ownerId, Long seatId) {
+        return seatRepo.findByEmployerIdAndId(ownerId, seatId);
+    }
+
+
+    /**
      * update the seat status to vacant
      * @param ownerId
      * @param seatId
@@ -96,6 +107,6 @@ public class SeatService {
      * @param ownerId
      */
     public void deleteAllSeats(String ownerId) {
-        seatRepo.deleteAll();
+        seatRepo.deleteAllByEmployeeId(ownerId);
     }
 }
