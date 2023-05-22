@@ -59,5 +59,11 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
         nativeQuery = true
     )
     long employeeCount(@Param("id") String employerId);
+
+    @Query(
+        value = "SELECT * FROM employees WHERE employer_id = :employerId AND manager_id IS NULL",
+        nativeQuery = true
+    )
+    List<Employee> getTopLevelEmployees(String employerId);
 }
 

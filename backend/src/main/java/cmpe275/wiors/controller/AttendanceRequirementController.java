@@ -88,7 +88,7 @@ public class AttendanceRequirementController {
                 HttpStatus.BAD_REQUEST);
         }
         AttendanceRequirement created = service.createAttendanceRequirement(req);
-        service.adjustMops(creator, mop);
+        service.adjustMops(creator, numberOfDays);
 
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
@@ -114,6 +114,7 @@ public class AttendanceRequirementController {
         req.setNumberOfDays(numberOfDays);
         req.setIsEmployerRule(true);
         service.setEmployerAttendanceRequirement(req);
+        service.updateMops(employerId, numberOfDays);
 
         return new ResponseEntity<>(HttpStatus.OK);
 	}

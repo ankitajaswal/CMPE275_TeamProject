@@ -31,7 +31,10 @@ public class AttendanceRequirementService {
     public AttendanceRequirement createAttendanceRequirement(AttendanceRequirement r) {
         AttendanceRequirement t = repository.getAttendanceRequirementByCreator(r.getCreator().getId(), r.isGetTogetherDay());
 
-        AttendanceRequirement used, existing = repository.findById(t.getId());
+        AttendanceRequirement used, existing = null;
+        if (t != null) {
+            existing = repository.findById(t.getId());
+        }
         if (existing != null) {
             existing.setIsGetTogetherDay(r.isGetTogetherDay());
             existing.setNumberOfDays(r.getNumberOfDays());
@@ -102,5 +105,11 @@ public class AttendanceRequirementService {
             reqs.add(eGtd);
         }
         return reqs;
+    }
+    
+    public void updateMops(String employerId, int mop) {
+        for (Employee e: employeeRepository.getTopLevelEmployees(employerId)) {
+            adjustMops(e.getId(), mop);
+        }
     }
 }

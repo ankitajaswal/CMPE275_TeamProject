@@ -22,5 +22,4 @@ public interface AttendanceRequirementRepository extends JpaRepository<Attendanc
     public AttendanceRequirement getAttendanceRequirementByCreator(long id, boolean isgtd);
 
     public AttendanceRequirement findById(long id);
-
 }
