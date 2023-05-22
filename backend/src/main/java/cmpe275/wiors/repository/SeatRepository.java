@@ -37,7 +37,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
      * Delete all seats by employerId
      * @param employerId
      */
-    void deleteAllByEmployeeId(String employerId);
+    void deleteAllByEmployerId(String employerId);
 
 
 }
