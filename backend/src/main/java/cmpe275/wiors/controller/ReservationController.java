@@ -64,6 +64,7 @@ public class ReservationController {
         Seat seat = seatService.getSeatByEmployerAndId(employerId, seatId);
         
         reservationService.createReservation(new Reservation(employer, reservee, seat, date, time));
+        seatService.updateSeatStatusReserved(employerId, seatId, employeeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -119,8 +120,13 @@ public class ReservationController {
     )
     public void deleteReservationById(
         @PathVariable String employerId,
-        @PathVariable Long reservtionId
+        @PathVariable Long reservationId
     ) {
-        reservationService.deleteReservationById(employerId, reservtionId);
+        Reservation r = reservationService.getReservationById(employerId, reservationId);
+        Seat s = r.getSeat();
+        Long seatId = s.getSeatId();
+
+        reservationService.deleteReservationById(employerId, reservationId);
+        seatService.updateSeatStatusVacant(employerId, seatId);
     }
 }
