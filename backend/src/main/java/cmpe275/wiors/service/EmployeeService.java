@@ -103,4 +103,7 @@ public class EmployeeService {
         return repository.employeeCount(employerId) > 0;
     }
 
+    public Employee getEmployeeByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 }

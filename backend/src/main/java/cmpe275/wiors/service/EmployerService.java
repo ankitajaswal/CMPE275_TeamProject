@@ -94,4 +94,8 @@ public class EmployerService {
         repository.deleteById(id);
         return;
     }
+
+    public Employer getEmployerByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 }

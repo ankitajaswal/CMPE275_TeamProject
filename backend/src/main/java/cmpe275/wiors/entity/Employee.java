@@ -51,6 +51,11 @@ public class Employee {
     private Long managerId;
 
     @Column
+    @JsonIgnore
+    @XmlTransient
+    private String password;
+
+    @Column
     private int mop;
 
     @Transient
@@ -176,5 +181,13 @@ public class Employee {
 
     public int getMop() {
         return mop;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

@@ -15,4 +15,6 @@ public interface EmployerRepository extends JpaRepository<Employer,String> {
      * @return employer with the given name
      */
     Employer findByName(String name);
+
+    Employer findByEmail(String email);
 }
