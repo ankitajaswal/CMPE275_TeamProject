@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/register.css';
 
 function Register() {
@@ -19,17 +20,25 @@ function Register() {
   const [statusCode, setStatusCode] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  const nav = useNavigate();
+
   useEffect(() => {
-      if (errorMsg) {
-          if (statusCode === 400) {
-              window.confirm(errorMsg);
-          } else if (statusCode === 404) {
-              window.confirm("Not found");
+      if (statusCode !== null) {
+          if (errorMsg !== null) {
+              if (statusCode === 400) {
+                  window.confirm(errorMsg);
+              } else if (statusCode === 404) {
+                  window.confirm("Not found");
+              }
+          }
+          if (statusCode === 200) {
+              nav("/");
           }
           setErrorMsg(null);
           setStatusCode(null);
       }
-  }, [statusCode, errorMsg]);
+  }, [statusCode, errorMsg, nav]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let url = global.config.url;
@@ -77,13 +86,15 @@ function Register() {
             return res.json();
         })
         .then(dat => {
-            setErrorMsg(dat.msg);
+            if (statusCode !== 200) {
+                setErrorMsg(dat.msg);
+            } else {
+                nav("/");
+            }
         })
         .catch(error => {
             console.log(error);
         });
-    console.log(`First Name: ${firstName}\nLast Name: ${lastName}\nEmail: ${email}\nPassword: ${password}\nRole: ${role}`);
-    // handle form submission here
   };
 
   const handleRoleChange = (event) => {
