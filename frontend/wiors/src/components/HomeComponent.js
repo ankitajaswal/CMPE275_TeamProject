@@ -3,8 +3,8 @@ import React from 'react';
 function HomeComponent() {
   return (
     <div>
-      <h1>Welcome to the Home page</h1>
-      <p>This is the landing page for our application.</p>
+      <h1>Welcome to WIORS</h1>
+      <p>Here to Make Hybrid Work Easy.</p>
     </div>
   );
 }
