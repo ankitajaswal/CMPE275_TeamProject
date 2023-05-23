@@ -21,7 +21,6 @@ import cmpe275.wiors.entity.Seat;
 import cmpe275.wiors.service.EmployeeService;
 import cmpe275.wiors.service.EmployerService;
 import cmpe275.wiors.service.ReservationService;
-import cmpe275.wiors.service.SeatService;
 
 @RestController
 @RequestMapping("/reservationService")
@@ -33,9 +32,6 @@ public class ReservationController {
     private EmployerService employerService;
     @Autowired
     private EmployeeService employeeService;
-    @Autowired
-    private SeatService seatService;
-
 
     /**
      * Create reservation and presist it
@@ -48,23 +44,30 @@ public class ReservationController {
      */
     @Transactional
     @RequestMapping(
-        value = "/createReservation/{employerId}/{employeeId}/{seatId}/{date}/{time}",
+        value = "/createReservation/{employerId}/{employeeId}/{date}",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> createReservation(
         @PathVariable String employerId,
         @PathVariable Long employeeId,
-        @PathVariable Long seatId,
-        @PathVariable Date date,
-        @PathVariable String time
+        @PathVariable Date date
     ) {
         Employer employer = employerService.getEmployerById(employerId);
         Employee reservee = employeeService.getEmployee(employeeId);
-        Seat seat = seatService.getSeatByEmployerAndId(employerId, seatId);
-        
-        reservationService.createReservation(new Reservation(employer, reservee, seat, date, time));
-        seatService.updateSeatStatusReserved(employerId, seatId, employeeId);
+        boolean checkReserved = reservationService.checkReservationByEmployee(employerId, employeeId, date);
+        if (checkReserved) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT) ;
+        }
+        List<Seat> vacantSeats = reservationService.getVacantSeats(employerId, date);
+        Seat reservedSeat = null;
+        if (vacantSeats.size() > 0) {
+            reservedSeat = vacantSeats.get(0);
+        }
+        else {
+
+        }      
+        reservationService.createReservation(new Reservation(employer, reservee, reservedSeat, date));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -122,11 +125,6 @@ public class ReservationController {
         @PathVariable String employerId,
         @PathVariable Long reservationId
     ) {
-        Reservation r = reservationService.getReservationById(employerId, reservationId);
-        Seat s = r.getSeat();
-        Long seatId = s.getSeatId();
-
         reservationService.deleteReservationById(employerId, reservationId);
-        seatService.updateSeatStatusVacant(employerId, seatId);
     }
 }
