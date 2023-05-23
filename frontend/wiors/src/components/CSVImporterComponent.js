@@ -84,10 +84,17 @@ class CSVImporterComponent extends Component {
                     Bulk seat reservation
                   </label>
                 </div>
-                <ImporterField name="email" label="Email" />
-                <ImporterField name="name" label="Name" />
-                <ImporterField name="password" label="Password" />
-                <ImporterField name="manager" label="Manager" />
+                {this.state.opType === 'user' && <div>
+                    <ImporterField name="email" label="Email" />
+                    <ImporterField name="name" label="Name" />
+                    <ImporterField name="password" label="Password" />
+                    <ImporterField name="manager" label="Manager" />
+                </div>}
+                {this.state.opType === 'seat' && <div>
+                    <ImporterField name="email" label="Email" />
+                    <ImporterField name="startDate" label="Start Date" />
+                    <ImporterField name="endDate" label="End Date" />
+                </div>}
                 </Importer>
             </div>
         )
