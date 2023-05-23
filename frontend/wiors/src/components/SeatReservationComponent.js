@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/seatreservation.css';
 import SeatingCapacityInput from './SeatingCapacityInput';
+import { employeeId } from '../config';
 
 function SeatReservation() {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
-  const [seatingCapacity, setSeatingCapacity] = useState(3);
+  const [statusCode, setStatusCode] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-
-  const handleSeatingCapacityChange = (value) => {
-    const parsedValue = parseInt(value, 10);
-    if (!isNaN(parsedValue) && parsedValue >= 3 && parsedValue <= 100) {
-      setSeatingCapacity(parsedValue);
+  useEffect(() => {
+    if (statusCode !== null) {
+        if (errorMsg !== null) {
+            if (statusCode !== 200) {
+                window.confirm(errorMsg);
+            }
+        }
+        setErrorMsg(null);
+        setStatusCode(null);
     }
-  };
+}, [statusCode, errorMsg]);
 
   const handleDateChange = (date) => {
     if (!selectedStartDate) {
@@ -51,6 +57,32 @@ function SeatReservation() {
       setSelectedDates([]);
     }
   };
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleSubmit = (event) => {
+    let selectedDatesF = selectedDates.map((date) => formatDate(date));
+    selectedDatesF.forEach(element => {
+      let url = global.config.url
+      + "reservationService/createReservation/" 
+      + global.config.employerId + "/"
+      + global.config.employeeId + "/"
+      + element;
+      let iterator = fetch(url, {method: "POST", headers: {"Accept": "application/json"}})
+      iterator.then(res => {
+        if (!res.ok) {
+          setStatusCode(res.status);
+          setErrorMsg("Failed to register");
+        }
+        iterator.then(dat => {});
+      });
+    })
+  }
   
   const getDatesInRange = (startDate, endDate) => {
     const dates = [];
@@ -92,37 +124,34 @@ function SeatReservation() {
 
     return null;
   };
-
   return (
+  
+
     <>
-
-      {/* Render the Calendar component */}
-
-      <div className='calendar-container' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Calendar onChange={handleDateChange} value={selectedStartDate || selectedEndDate} tileContent={highlightSelectedDates} />
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
-        {selectedStartDate && selectedEndDate && (
-          <p className='text-center'>
-            <span className='bold'>Start Date:</span> {selectedStartDate.toDateString()}
-            <br />
-            <span className='bold'>End Date:</span> {selectedEndDate.toDateString()}
-          </p>
-        )}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
-        <p className='text-center'>
-          <span className='bold'>Selected Dates:</span>
-          {' '}
-          {selectedDates.map((date) => date.toDateString()).join(', ')}
-        </p>
-      </div>
-
-      {/* Render the SeatingCapacityInput component */}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <SeatingCapacityInput onChange={handleSeatingCapacityChange} defaultValue={seatingCapacity} />
-      </div>
-    </>
+   {/* Render the Calendar component */}
+   <div className='calendar-container' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+     <Calendar onChange={handleDateChange} value={selectedStartDate || selectedEndDate} tileContent={highlightSelectedDates} />
+   </div>
+   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+     {selectedStartDate && selectedEndDate && (
+       <p className='text-center'>
+         <span className='bold'>Start Date:</span> {formatDate(selectedStartDate)}
+         <br />
+         <span className='bold'>End Date:</span> {formatDate(selectedEndDate)}
+       </p>
+     )}
+   </div>
+   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+     <p className='text-center'>
+       <span className='bold'>Selected Dates:</span>
+       {' '}
+       {selectedDates.map((date) => formatDate(date)).join(', ')}
+     </p>
+   </div>
+   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem' }}>
+    <button type='submit' onClick={handleSubmit}>Reserve</button>
+   </div>
+  </>
   );
 }
 
