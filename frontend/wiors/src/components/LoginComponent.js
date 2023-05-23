@@ -14,10 +14,8 @@ function Login() {
   useEffect(() => {
       if (statusCode !== null) {
           if (errorMsg !== null) {
-              if (statusCode === 403) {
+              if (statusCode !== 200) {
                   window.confirm(errorMsg);
-              } else if (statusCode === 404) {
-                  window.confirm("Not found");
               }
           }
           if (statusCode === 200) {
@@ -44,27 +42,20 @@ function Login() {
     });
     iterator
         .then(res => { 
-            setStatusCode(res.status);
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                return;
-            }
-        })
-        .then(dat => {
-            if (statusCode !== 200) {
-                setErrorMsg("Invalid user");
-            } else {
-                if (!dat.isEmployer) {
-                    global.config.employeeId = dat.employeeId;
+            res.json().then(dat => {
+                console.log(res.ok);
+                if (!res.ok) {
+                    setStatusCode(res.status);
+                    setErrorMsg("Invalid user");
+                } else {
+                    if (!dat.isEmployer) {
+                        global.config.employeeId = dat.employeeId;
+                    }
+                    global.config.employerId = dat.employerId;
+                    global.config.isEmployer = dat.isEmployer;
+                    nav("/seatreservation");
                 }
-                global.config.employerId = dat.employerId;
-                global.config.isEmployer = dat.isEmployer;
-                console.log(global.config.employerId);
-            }
-        })
-        .catch(error => {
-            console.log(error);
+            });
         });
   };
 

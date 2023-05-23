@@ -60,7 +60,7 @@ public class UserController {
                 return new ResponseEntity<>("{\"msg\":\"email is invalid\"}", HttpStatus.NOT_FOUND);
             }
             if (!employee.getPassword().equals(password)) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("{\"msg\":\"Invalid user\"}", HttpStatus.FORBIDDEN);
             }
             user.setEmployerId(employee.getEmployerId());
             user.setEmployeeId(employee.getId());
