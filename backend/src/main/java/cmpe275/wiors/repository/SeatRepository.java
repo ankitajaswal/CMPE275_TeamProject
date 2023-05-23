@@ -16,13 +16,6 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
      */
     List<Seat> findByEmployerId( String employerId);
 
-    /**
-     * @param employer the employer which ownes the seats
-     * @param status the status of the seat ( reserved or not )
-     * @return all seats owned by employer with specified status
-     */
-    List<Seat> findByEmployerIdAndReserved(String employerId, boolean status);
-
 
     /**
      * Get single seat info owned by an employer
