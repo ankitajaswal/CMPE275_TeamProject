@@ -70,6 +70,7 @@ public class EmployeeController {
         @RequestParam(value = "name", required = true) String name,
         @RequestParam(value = "email", required = true) String email,
         @RequestParam(value = "password", required = true) String password,
+        @RequestParam(value = "is_google", required = false) boolean is_google,
         @RequestParam(value = "title", required = false) String title,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,
@@ -112,6 +113,7 @@ public class EmployeeController {
         employee.setEmail(email);
         employee.setPassword(password);
         employee.setTitle(title);
+        employee.setIsGoogle(is_google);
         employee.setAddress(new Address(street, city, state, zip));
 
         employee.setMop(attendanceRequirementService.calculateMop(employerId, null));
