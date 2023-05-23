@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -92,17 +93,17 @@ public class AttendanceRequirementService {
         }
     }
 
-    public List<AttendanceRequirement> getEmployeeGtds(Employee e) {
-        List<AttendanceRequirement> reqs = new ArrayList<>();
+    public List<DayOfWeek> getEmployeeGtds(Employee e) {
+        List<DayOfWeek> reqs = new ArrayList<>();
         if (e.getManagerId() != null) {
             AttendanceRequirement mgrGtd = repository.getAttendanceRequirementByCreator(e.getManagerId(), true);
             if (mgrGtd != null) {
-                reqs.add(mgrGtd);
+                reqs.add(mgrGtd.getDayOfWeek());
             }
         }
         AttendanceRequirement eGtd = repository.getAttendanceRequirementByCreator(e.getId(), true);
         if (eGtd != null) {
-            reqs.add(eGtd);
+            reqs.add(eGtd.getDayOfWeek());
         }
         return reqs;
     }

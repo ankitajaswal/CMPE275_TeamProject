@@ -56,11 +56,13 @@ public class AttendanceRequirementController {
         AttendanceRequirement req = new AttendanceRequirement();
         Employer employerObj = employerService.getEmployerById(employer);
         if (!validStr(employer) || employerObj == null) {
+            System.out.println("invalid employer ID");
             return new ResponseEntity<>("Invalid employer ID", HttpStatus.BAD_REQUEST);
         }
         req.setEmployer(employerService.getEmployerById(employer));
         Employee creatorEmp = employeeService.getEmployee(creator);
         if (creator == null || creatorEmp == null) {
+            System.out.println("invalid employee ID");
             return new ResponseEntity<>("Invalid employee ID for creator", HttpStatus.NOT_FOUND);
         }
         req.setCreator(creatorEmp);
@@ -68,6 +70,7 @@ public class AttendanceRequirementController {
         req.setNumberOfDays(numberOfDays);
         req.setIsEmployerRule(false);
         if (isGetTogetherDay && dayOfWeek == null) {
+            System.out.println("dkjhk");
             return new ResponseEntity<>("If isGetTogetherDay is true, dayOfWeek must be an Integer in [1,5]",
                     HttpStatus.BAD_REQUEST);
         } else if (dayOfWeek != null) { // could be null if isGetTogetherDay is false
@@ -75,15 +78,18 @@ public class AttendanceRequirementController {
         }
 
         if (isGetTogetherDay && numberOfDays != 1) {
+            System.out.println("nop");
             return new ResponseEntity<>("If isGetTogetherDay is true, numberOfDays must equal 1",
                     HttpStatus.BAD_REQUEST);
         }
         if (isGetTogetherDay && (dayOfWeek < 1 || dayOfWeek > 5)) {
+            System.out.println("still nop");
             return new ResponseEntity<>("dayOfWeek must be in [1,5]", HttpStatus.BAD_REQUEST);
         }
         
         int mop = employeeService.getEmployee(creator).getMop();
         if (mop > numberOfDays && !isGetTogetherDay) {
+            System.out.println("zzz");
             return new ResponseEntity<>("numberOfDays must be greater than or equal to creator's MOP",
                 HttpStatus.BAD_REQUEST);
         }
