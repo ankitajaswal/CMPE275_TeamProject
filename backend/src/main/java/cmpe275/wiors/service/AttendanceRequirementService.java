@@ -6,6 +6,8 @@ import cmpe275.wiors.repository.AttendanceRequirementRepository;
 import cmpe275.wiors.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.time.DayOfWeek;
@@ -42,6 +44,8 @@ public class AttendanceRequirementService {
             existing.setIsEmployerRule(r.isEmployerRule());
             existing.setDayOfWeek(r.getDayOfWeek());
             used = existing;
+            repository.delete(used);
+            repository.flush();
         } else {
             used = r;
         }

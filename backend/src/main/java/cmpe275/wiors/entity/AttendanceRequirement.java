@@ -26,7 +26,7 @@ public class AttendanceRequirement {
     private Employer employer;
 
     @ManyToOne()
-    @JoinColumn(name = "creator", referencedColumnName = "id", nullable = true, unique = true)
+    @JoinColumn(name = "creator", referencedColumnName = "id", nullable = true)
     private Employee creator;
 
     @Column

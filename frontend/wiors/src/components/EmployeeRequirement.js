@@ -33,6 +33,9 @@ class EmployeeRequirement extends Component {
                 "Accept": "application/json"
             }
         });
+        console.log(this.state.gtds);
+        console.log(this.state.gtds.length);
+        console.log(url + "/gtd");
         iterator1.then(res => res.json())
             .then(dat => {
                 this.setState({gtds: dat});
@@ -65,12 +68,34 @@ class EmployeeRequirement extends Component {
     addNewGtd(event) {
         event.preventDefault();
         this.state.newGtdDay = event.target.querySelector('input[name="newGtdDay"]:checked').value;
-        console.log(this.state.newGtdDay);
+        let url = global.config.url + "requirement?numberOfDays=1"
+            + "&creator=" + global.config.employeeId
+            + "&employer=" + global.config.employerId
+            + "&isGetTogetherDay=true";
+        if (this.state.newGtdDay === "Monday") {
+            url += "&dayOfWeek=1";
+        } else if (this.state.newGtdDay === "Tuesday") {
+            url += "&dayOfWeek=2";
+        } else if (this.state.newGtdDay === "Wednesday") {
+            url += "&dayOfWeek=3";
+        } else if (this.state.newGtdDay === "Thursday") {
+            url += "&dayOfWeek=4";
+        } else if (this.state.newGtdDay === "Friday") {
+            url += "&dayOfWeek=5";
+        }
+
+        let iterator = fetch(url, {
+            method: "POST",
+        });
+        iterator.then(res => {
+            this.componentDidMountLogic();
+        }).then(() => {
+            this.componentDidMountLogic();
+        });
     }
 
     render() {
         const mop = this.state.mop;
-        const newGtdDay = this.state.newGtdDay;
         return (
             <div>
                 <div>
@@ -87,7 +112,7 @@ class EmployeeRequirement extends Component {
                 </form>
                 <br />
                 <p>Create a new get together day (each manager can only have one)</p>
-                <form onsubmit={this.addNewGtd}>
+                <form onSubmit={this.addNewGtd}>
                   <label>
                     <input type="radio" name="newGtdDay" value="Monday" /> Monday
                   </label>
