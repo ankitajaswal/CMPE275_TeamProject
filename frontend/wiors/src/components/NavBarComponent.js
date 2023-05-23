@@ -31,6 +31,11 @@ function NavBar() {
             Seat Reservation
           </Link>
         </li>
+        <li className='nav-item'>
+          <Link to='/attendancerequirements' className='nav-link'>
+            Attendance Requirements
+          </Link>
+        </li>
       </ul>
     </nav>
   );

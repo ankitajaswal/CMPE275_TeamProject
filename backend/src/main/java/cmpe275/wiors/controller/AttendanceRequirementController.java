@@ -133,7 +133,7 @@ public class AttendanceRequirementController {
         if (r != null) {
             days = r.getNumberOfDays();
         }
-        return new ResponseEntity<>(days, HttpStatus.OK);
+        return new ResponseEntity<>("{\"days\":" + days + "}", HttpStatus.OK);
     }
 
     @Transactional
@@ -146,7 +146,7 @@ public class AttendanceRequirementController {
         if (emp == null) {
             return new ResponseEntity<>("Invalid employee ID", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(employeeService.getEmployee(employeeId).getMop(), HttpStatus.OK);
+        return new ResponseEntity<>("{\"days\":" + employeeService.getEmployee(employeeId).getMop() + "}", HttpStatus.OK);
     }
 
     @Transactional

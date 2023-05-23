@@ -43,7 +43,6 @@ function Login() {
     iterator
         .then(res => { 
             res.json().then(dat => {
-                console.log(res.ok);
                 if (!res.ok) {
                     setStatusCode(res.status);
                     setErrorMsg("Invalid user");
@@ -52,7 +51,7 @@ function Login() {
                         global.config.employeeId = dat.employeeId;
                     }
                     global.config.employerId = dat.employerId;
-                    global.config.isEmployer = dat.isEmployer;
+                    global.config.isEmployer = dat.employer;
                     nav("/seatreservation");
                 }
             });
