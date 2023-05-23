@@ -56,7 +56,8 @@ public class EmployeeService {
      * @return the employee in dto form
      */
     public EmployeeDto getEmployeeDto(long id) {
-        return repository.findById(id).toDto();
+        Employee e = repository.findById(id);
+        return (e != null) ? e.toDto() : null;
     }
 
     /**
@@ -103,4 +104,7 @@ public class EmployeeService {
         return repository.employeeCount(employerId) > 0;
     }
 
+    public Employee getEmployeeByEmail(String email) {
+        return repository.findByEmail(email);
+    }
 }

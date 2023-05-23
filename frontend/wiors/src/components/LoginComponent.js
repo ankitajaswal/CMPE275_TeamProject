@@ -1,27 +1,74 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('employee');
+  const [statusCode, setStatusCode] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const nav = useNavigate();
+
+  useEffect(() => {
+      if (statusCode !== null) {
+          if (errorMsg !== null) {
+              if (statusCode !== 200) {
+                  window.confirm(errorMsg);
+              }
+          }
+          if (statusCode === 200) {
+              nav("/seatreservation");
+          }
+          setErrorMsg(null);
+          setStatusCode(null);
+      }
+  }, [statusCode, errorMsg, nav]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Username: ${username}\nPassword: ${password}\nRole: ${role}`);
-    // handle form submission here
+    let url = global.config.url + "login?";
+    url += "email=" + email
+        + "&password=" + password;
+    if (role === "employer") {
+        url += "&isEmployer=true";
+    }
+    let iterator = fetch(url, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json"
+        }
+    });
+    iterator
+        .then(res => { 
+            res.json().then(dat => {
+                console.log(res.ok);
+                if (!res.ok) {
+                    setStatusCode(res.status);
+                    setErrorMsg("Invalid user");
+                } else {
+                    if (!dat.isEmployer) {
+                        global.config.employeeId = dat.employeeId;
+                    }
+                    global.config.employerId = dat.employerId;
+                    global.config.isEmployer = dat.isEmployer;
+                    nav("/seatreservation");
+                }
+            });
+        });
   };
 
   return (
     <div className='login-form'>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor='username'>Username:</label>
+        <label htmlFor='email'>Email:</label>
         <input
           type='text'
-          id='username'
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          id='email'
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
         <label htmlFor='password'>Password:</label>
         <input

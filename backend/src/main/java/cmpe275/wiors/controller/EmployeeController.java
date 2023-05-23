@@ -44,6 +44,8 @@ public class EmployeeController {
      *
      * @param employerId path parameter, employer this employee belongs to
      * @param name required query parameter, name of employee
+     * @param email required query parameter, email of employee
+     * @param password required query parameter, password of employee
      * @param title optional query parameter, title of employee
      * @param street optional query parameter, street of employee's address
      * @param city optional query parameter, city of employee's address
@@ -66,7 +68,8 @@ public class EmployeeController {
 	public ResponseEntity<?> createEmployee(
         @PathVariable String employerId,
         @RequestParam(value = "name", required = true) String name,
-        @RequestParam(value = "email", required = false) String email,
+        @RequestParam(value = "email", required = true) String email,
+        @RequestParam(value = "password", required = true) String password,
         @RequestParam(value = "title", required = false) String title,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,
@@ -77,10 +80,19 @@ public class EmployeeController {
     ) {
         Employer employer = employerService.getEmployerById(employerId);
         if (employerId == null || employer == null) {
-            return new ResponseEntity<>("EmployerId is invalid", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("{\"msg\":\"EmployerId is invalid\"}", HttpStatus.NOT_FOUND);
         }
         if (!validStr(name)) {
-            return new ResponseEntity<>("Missing or invalid name", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid name\"}", HttpStatus.BAD_REQUEST);
+        }
+        if (!validStr(email)) {
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid email\"}", HttpStatus.BAD_REQUEST);
+        }
+        if (!validStr(password)) {
+            return new ResponseEntity<>("{\"msg\":\"Missing or invalid password\"}", HttpStatus.BAD_REQUEST);
+        }
+        if (employerService.getEmployerByEmail(email) != null || employeeService.getEmployeeByEmail(email) != null) {
+            return new ResponseEntity<>("{\"msg\":\"Duplicate email\"}", HttpStatus.BAD_REQUEST);
         }
 
         Employee employee = new Employee();
@@ -88,20 +100,20 @@ public class EmployeeController {
         if (managerId != null) {
             manager = employeeService.getEmployeeDto(managerId);
             if (manager == null) {
-                return new ResponseEntity<>("Invalid managerId", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("{\"msg\":\"Invalid managerId\"}", HttpStatus.NOT_FOUND);
             }
             if (!manager.getEmployerId().equals(employerId)) {
-                return new ResponseEntity<>("Manager must belong to employee's employer", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("{\"msg\":\"Manager must belong to employee's employer\"}", HttpStatus.BAD_REQUEST);
             }
             employee.setManagerId(managerId);
         }
         employee.setEmployerId(employerId);
         employee.setName(name);
         employee.setEmail(email);
+        employee.setPassword(password);
         employee.setTitle(title);
         employee.setAddress(new Address(street, city, state, zip));
 
-        System.out.println(attendanceRequirementService);
         employee.setMop(attendanceRequirementService.calculateMop(employerId, null));
 
         Employee newEmployee = employeeService.createEmployee(employee);
