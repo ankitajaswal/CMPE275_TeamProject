@@ -2,6 +2,7 @@ package cmpe275.wiors.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.time.DayOfWeek;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +21,7 @@ import cmpe275.wiors.entity.Reservation;
 import cmpe275.wiors.entity.Seat;
 import cmpe275.wiors.service.EmployeeService;
 import cmpe275.wiors.service.EmployerService;
+import cmpe275.wiors.service.AttendanceRequirementService;
 import cmpe275.wiors.service.ReservationService;
 
 @RestController
@@ -32,6 +34,8 @@ public class ReservationController {
     private EmployerService employerService;
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private AttendanceRequirementService attendanceRequirementService;
 
     /**
      * Create reservation and presist it
@@ -65,8 +69,20 @@ public class ReservationController {
             reservedSeat = vacantSeats.get(0);
         }
         else {
-
-        }      
+            List<Reservation> reservations = reservationService.getReservationsForDate(employerId, date);
+            for (Reservation r: reservations) {
+                int officePresence = 
+                    reservationService.getOfficePresenceForWeekOf(employerId, r.getReservee().getId(), date);
+                DayOfWeek day = date.toLocalDate().getDayOfWeek();
+                boolean hasGtd = attendanceRequirementService.hasGtdOnDay(r.getReservee().getId(), day);
+                if (officePresence > reservee.getMop() && !hasGtd) {
+                    reservedSeat = r.getSeat();
+                    reservationService.deleteReservationById(employerId, r.getId());
+                    break;
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         reservationService.createReservation(new Reservation(employer, reservee, reservedSeat, date));
         return new ResponseEntity<>(HttpStatus.OK);
     }

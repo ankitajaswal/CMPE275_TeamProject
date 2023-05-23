@@ -117,4 +117,10 @@ public class AttendanceRequirementService {
             adjustMops(e.getId(), mop);
         }
     }
+
+    public boolean hasGtdOnDay(Long employeeId, DayOfWeek day) {
+        List<DayOfWeek> gtds = getEmployeeGtds(employeeRepository.findById(employeeId).get());
+        return gtds.contains(day);
+    }
+
 }

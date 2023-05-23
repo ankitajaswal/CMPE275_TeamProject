@@ -2,6 +2,8 @@ package cmpe275.wiors.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,6 +103,37 @@ public class ReservationService {
             }
         }
         return false;
+    }
+
+    public List<Reservation> getReservationsForDate(String employerId, Date date) {
+        return reservationRepo.findByEmployerIdAndDate(employerId, date);
+    }
+
+    public int getOfficePresenceForWeekOf(String employerId, Long employeeId, Date date) {
+        int officePresence = 0;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        List<Date> datesOfWeek = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
+                calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                calendar.add(Calendar.DAY_OF_WEEK, 1);
+                continue;
+            }
+            Date resultDate = new Date(calendar.getTimeInMillis());
+            datesOfWeek.add(resultDate);
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
+        }
+
+        for (Date d: datesOfWeek) {
+            if (checkReservationByEmployee(employerId, employeeId, d)) {
+                officePresence++;
+            }
+        }
+        return officePresence;
     }
 
 }
