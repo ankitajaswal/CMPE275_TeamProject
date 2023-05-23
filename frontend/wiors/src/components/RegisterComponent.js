@@ -127,7 +127,8 @@ function Register() {
             />
             Employer
           </label>
-        </div>     <form onSubmit={handleSubmit}>
+        </div>
+      <form onSubmit={handleSubmit}>
         <label htmlFor='email'>Email:</label>
         <input
           type='email'
