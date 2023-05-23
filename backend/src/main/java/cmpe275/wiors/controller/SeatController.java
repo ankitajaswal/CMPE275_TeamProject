@@ -42,9 +42,8 @@ public class SeatController {
     public ResponseEntity<?> createSeat(
         @PathVariable String employerid
     ) {
-        Boolean status = false;
         Employer owner = employerService.getEmployerById(employerid);
-        seatService.createSeat(new Seat(owner, status));
+        seatService.createSeat(new Seat(owner));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -67,65 +66,17 @@ public class SeatController {
     }
 
 
-    /**
-     * returns all seats for employees by reserved status
-     * @param ownerId
-     * @param status
-     * @return list of seats
-     */
     @Transactional
     @RequestMapping(
-        value = "/getAllSeatsByStatus/{ownerId}/{status}",
+        value = "/getSeatById/{ownerId}/{seatId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<Seat> getAllSeatsByStatus(
+    public Seat getSeatById(
         @PathVariable String ownerId,
-        @PathVariable Boolean status
+        @PathVariable Long seatId
     ) {
-        return seatService.getAllSeatsByEmployerAndStatus(ownerId, status);
-    }
-
-
-    /**
-     * updates the seat status to reflect vacant
-     * @param ownerId
-     * @param seatId
-     * @return the updates Seat object
-     */
-    @Transactional
-    @RequestMapping(
-        value = "/updateSeatStatusVacant/{ownerId}/{seatId}",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public Seat updateSeatStatus(
-        @PathVariable String ownerId,
-        @PathVariable long seatId
-    ) {
-        return seatService.updateSeatStatusVacant(ownerId, seatId);
-    }
-
-
-    /**
-     * updates the seat status to reserved
-     * @param ownerId
-     * @param seatId
-     * @param employeeId
-     * @return reserved seat object
-     */
-    @Transactional
-    @RequestMapping(
-        value = "/updateSeatStatusReserved/{ownerId}/{seatId}/{employeeId}",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public Seat updateSeatStatusReserved(
-        @PathVariable String ownerId,
-        @PathVariable Long seatId,
-        @PathVariable Long employeeId
-    ) {
-        return seatService.updateSeatStatusReserved(ownerId, seatId, employeeId);
+        return seatService.getSeatByEmployerAndId(ownerId, seatId);
     }
 
 

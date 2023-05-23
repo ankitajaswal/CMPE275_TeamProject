@@ -34,9 +34,6 @@ public class Reservation {
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
-    private String time;
-
 
     //-------- Constructors --------
 
@@ -44,12 +41,11 @@ public class Reservation {
     public Reservation() {}
 
     //  create reservation constructor
-    public Reservation(Employer employer, Employee reservee, Seat seat, Date date, String time) {
+    public Reservation(Employer employer, Employee reservee, Seat seat, Date date) {
         this.setEmployer(employer);
         this.setReservee(reservee);
         this.setSeat(seat);
         this.setDate(date);
-        this.setTime(time);
     }
 
 
@@ -75,11 +71,6 @@ public class Reservation {
         this.date = date;
     }
 
-    // set time
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     // get reservation id
     public long getId() {
         return this.id;
@@ -103,10 +94,5 @@ public class Reservation {
     // get date
     public Date getDate() {
         return this.date;
-    }
-
-    // get time
-    public String getTime() {
-        return this.time;
     }
 }
