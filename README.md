@@ -1,1 +1,1 @@
-# CMPE275_Lab2
+# CMPE275_Lab2 - Group Project
