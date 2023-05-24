@@ -8,7 +8,10 @@ class CSVImporterComponent extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { opType: '' };
+        this.state = {
+            opType: '',
+            userRows: []
+        };
         this.handleOpTypeChange = this.handleOpTypeChange.bind(this);
     }
 
@@ -32,6 +35,7 @@ class CSVImporterComponent extends Component {
                     // (if this callback returns a promise, the widget will wait for it 
                     //      before parsing more data)
                     console.log("received batch of rows", rows);
+                    this.state.userRows = rows;
 
                     // mock timeout to simulate processing
                     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -48,16 +52,28 @@ class CSVImporterComponent extends Component {
                     // optional, invoked right after import is done (but user did 
                     //      not dismiss/reset the widget yet)
                     console.log("finished import of file", file, "with fields", fields);
+                    if (this.state.opType === 'user') {
+                        const url = global.config.url + "user/bulk?employerId=" + global.config.employerId;
+                        let iterator = fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(this.state.userRows)
+                        });
+                        iterator.then(res => {
+                            if (!res.ok) {
+                                window.confirm("Bulk user registration failed");
+                            }
+                        });
+                    } else {
+                        // submit 'rows' to seat reservation backend
+                    }
                 }}
                 onClose={() => {
                     // optional, invoked when import is done and user clicked "Finish"
                     // (if this is not specified, the widget lets the user upload another file)
                     console.log("importer dismissed");
-                    if (this.state.opType === 'user') {
-                        // submit 'rows' to user backend
-                    } else {
-                        // submit 'rows' to seat reservation backend
-                    }
                 }}
                 >
                 <label htmlFor='opType'>Select operation:</label>

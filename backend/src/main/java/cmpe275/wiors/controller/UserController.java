@@ -94,11 +94,11 @@ public class UserController {
             if (!validStr(n.getEmail())) {
                 throw null;
             }
-            if (!validStr(n.getPassword().substring(1,n.getPassword().length() - 1))) {
+            if (!validStr(n.getPassword().strip().substring(1,n.getPassword().strip().length() - 1))) {
                 throw null;
             }
             if (validStr(n.getManager())) {
-                Employee manager = employeeService.getEmployeeByEmail(n.getManager());
+                Employee manager = employeeService.getEmployeeByEmail(n.getManager().strip());
                 if (manager == null) {
                     throw null;
                 }
@@ -107,10 +107,12 @@ public class UserController {
                 }
                 e.setManager(manager.toDto());
             }
+            e.setName(n.getName().strip());
             e.setEmployerId(employerId);
             e.setEmployer(employer.toDto());
-            e.setEmail(n.getEmail());
-            e.setPassword(n.getPassword().substring(1,n.getPassword().length() - 1));
+            e.setEmail(n.getEmail().strip());
+            e.setPassword(n.getPassword().strip().substring(1,n.getPassword().strip().length() - 1));
+            employeeService.createEmployee(e);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
