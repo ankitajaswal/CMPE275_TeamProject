@@ -24,14 +24,19 @@ public class ActivationController {
 		// Replace this with your custom activation logic
 
 		Activation activation = new Activation();
-		String emailAddress = activation.encodeEmail(id);
+		String emailAddress = activation.decodeEmail(id);
 
 		if (emailAddress != null) {
-			Employee e = employeeService.getEmployeeByEmail(emailAddress);
-			e.setIsVerified(true);
-			employeeService.updateEmployee(e);
-
-			return new ResponseEntity<>("<html><body>Account verified :^)</body></html>", HttpStatus.OK);
+			Employee employee = employeeService.getEmployeeByEmail(emailAddress);
+			if (employee != null) {
+				System.err.println("Found User");
+				employee.setIsVerified(true);
+				employeeService.updateEmployee(employee);
+				return new ResponseEntity<>("<html><body>Account verified :^)</body></html>", HttpStatus.OK);				
+			} else {
+				System.err.println("User Not Found");
+				return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.OK);								
+			}
 		} else {
 			throw null;
 		}
