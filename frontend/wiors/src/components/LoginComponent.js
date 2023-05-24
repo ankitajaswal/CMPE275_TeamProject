@@ -19,7 +19,7 @@ function Login() {
               }
           }
           if (statusCode === 200) {
-              nav("/seatreservation");
+              nav("/userDash");
           }
           setErrorMsg(null);
           setStatusCode(null);
@@ -52,7 +52,7 @@ function Login() {
                     }
                     global.config.employerId = dat.employerId;
                     global.config.isEmployer = dat.employer;
-                    nav("/seatreservation");
+                    nav("/userDash");
                 }
             });
         });
