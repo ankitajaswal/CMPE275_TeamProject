@@ -59,7 +59,7 @@ public class EmployerController {
         @RequestParam(value = "name", required = true) String name,
         @RequestParam(value = "email", required = true) String email,
         @RequestParam(value = "password", required = true) String password,
-        @RequestParam(value = "is_google", required = false) Boolean is_google,
+        @RequestParam(value = "is_google", required = false) int is_google,
         @RequestParam(value = "description", required = false) String description,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,
@@ -91,7 +91,7 @@ public class EmployerController {
         e.setEmail(email);
         e.setPassword(password);
         e.setIsGoogle(is_google);
-        e.setIsVerified(false);
+        e.setIsVerified(0);
 
         Employer employer = service.createEmployer(e);
 

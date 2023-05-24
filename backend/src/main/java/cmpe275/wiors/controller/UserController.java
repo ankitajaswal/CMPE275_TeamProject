@@ -63,7 +63,7 @@ public class UserController {
             if (employee == null) {
                 return new ResponseEntity<>("{\"msg\":\"email is invalid\"}", HttpStatus.NOT_FOUND);
             }
-            if (!employee.getPassword().equals(password) && !employee.getIsVerified()) {
+            if (!employee.getPassword().equals(password) && employee.getIsVerified()<=0) {
                 return new ResponseEntity<>("{\"msg\":\"Invalid user or Not Verified\"}", HttpStatus.FORBIDDEN);
             }
             user.setEmployerId(employee.getEmployerId());

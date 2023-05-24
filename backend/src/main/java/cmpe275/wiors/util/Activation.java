@@ -27,7 +27,7 @@ public class Activation {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     public String decodeEmail(String encodedEmail) {
@@ -45,7 +45,7 @@ public class Activation {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
     
     

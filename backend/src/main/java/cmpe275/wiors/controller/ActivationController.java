@@ -30,15 +30,15 @@ public class ActivationController {
 			Employee employee = employeeService.getEmployeeByEmail(emailAddress);
 			if (employee != null) {
 				System.err.println("Found User");
-				employee.setIsVerified(true);
+				employee.setIsVerified(1);
 				employeeService.updateEmployee(employee);
 				return new ResponseEntity<>("<html><body>Account verified :^)</body></html>", HttpStatus.OK);				
 			} else {
 				System.err.println("User Not Found");
-				return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.OK);								
+				return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);								
 			}
 		} else {
-			throw null;
+			return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);								
 		}
 	}
 }
