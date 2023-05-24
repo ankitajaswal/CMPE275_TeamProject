@@ -3,6 +3,7 @@ import SetSeatCapacity from './SetSeatCapacity';
 import SeatReservation from './SeatReservationComponent';
 import EmployerRequirement from "./EmployerRequirement";
 import EmployeeRequirement from "./EmployeeRequirement";
+import CSVImporterComponent from './CSVImporterComponent';
 
 function UserDash() {
     console.log(global.config);
@@ -11,6 +12,7 @@ function UserDash() {
             <div>
                 <EmployerRequirement />
                 <SetSeatCapacity/>
+                <CSVImporterComponent />
             </div>
         )
     } else {

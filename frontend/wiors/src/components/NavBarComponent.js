@@ -21,21 +21,6 @@ function NavBar() {
             Login
           </Link>
         </li>
-        <li className='nav-item'>
-          <Link to='/bulk' className='nav-link'>
-            Bulk
-          </Link>
-        </li>
-        <li className='nav-item'>
-          <Link to='/seatreservation' className='nav-link'>
-            Seat Reservation
-          </Link>
-        </li>
-        <li className='nav-item'>
-          <Link to='/attendancerequirements' className='nav-link'>
-            Attendance Requirements
-          </Link>
-        </li>
       </ul>
     </nav>
   );
