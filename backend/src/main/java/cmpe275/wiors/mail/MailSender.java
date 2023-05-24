@@ -36,7 +36,7 @@ public class MailSender {
         try {
         	
         	Activation activation = new Activation();
-        	String mailBody = "To activate your account please click on this link: http://107.175.28.141:8080/activate?id=" + activation.encodeEmail(recipient);
+        	String mailBody = "To activate your account please click on this link: http://107.175.28.141:8080/activate/" + activation.encodeEmail(recipient);
         	
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
