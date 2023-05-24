@@ -54,6 +54,7 @@ public class MailSender {
     
     public static void main(String[] args) {
     	MailSender mailSender = new MailSender();
+    	mailSender.sendActivationMail("aidan.jones@sjsu.edu"); 
     	mailSender.sendActivationMail("zaber.ahmed@gmail.com"); 
     }
 
