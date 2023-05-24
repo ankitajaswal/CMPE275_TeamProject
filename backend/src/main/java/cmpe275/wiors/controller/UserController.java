@@ -1,10 +1,13 @@
 package cmpe275.wiors.controller;
 
 import cmpe275.wiors.entity.Employee;
+import cmpe275.wiors.entity.NewUserInfo;
 import cmpe275.wiors.entity.User;
 import cmpe275.wiors.entity.Employer;
 import cmpe275.wiors.service.EmployeeService;
 import cmpe275.wiors.service.EmployerService;
+import javax.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.HttpStatus;
@@ -12,11 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The main rest controller for employees.
+ * The main rest controller for user bulk creation and login.
  */
 @RestController
 public class UserController {
@@ -69,5 +73,51 @@ public class UserController {
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
         return ResponseEntity.ok().contentType(contentType).body(user);
+    }
+
+    @Transactional
+    @RequestMapping(
+        value = "/user/bulk",
+        method = RequestMethod.POST
+    )
+	public ResponseEntity<?> bulkAcctCreation(
+        @Valid @RequestBody List<NewUserInfo> newUsers,
+        @RequestParam(value = "employerId", required = true) String employerId
+    ) {
+        Employer employer = employerService.getEmployerById(employerId);
+        if (employer == null) {
+            throw null;
+        }
+        for (NewUserInfo n: newUsers) {
+            Employee e = new Employee();
+
+            if (!validStr(n.getEmail())) {
+                throw null;
+            }
+            if (!validStr(n.getPassword().strip().substring(1,n.getPassword().strip().length() - 1))) {
+                throw null;
+            }
+            if (validStr(n.getManager())) {
+                Employee manager = employeeService.getEmployeeByEmail(n.getManager().strip());
+                if (manager == null) {
+                    throw null;
+                }
+                if (!manager.getEmployerId().equals(employer.getId())) {
+                    throw null;
+                }
+                e.setManager(manager.toDto());
+            }
+            e.setName(n.getName().strip());
+            e.setEmployerId(employerId);
+            e.setEmployer(employer.toDto());
+            e.setEmail(n.getEmail().strip());
+            e.setPassword(n.getPassword().strip().substring(1,n.getPassword().strip().length() - 1));
+            employeeService.createEmployee(e);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean validStr(String str) {
+        return str != null && !str.isEmpty();
     }
 }
