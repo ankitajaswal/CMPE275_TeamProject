@@ -91,6 +91,7 @@ public class EmployerController {
         e.setEmail(email);
         e.setPassword(password);
         e.setIsGoogle(is_google);
+        e.setIsVerified(false);
 
         Employer employer = service.createEmployer(e);
 

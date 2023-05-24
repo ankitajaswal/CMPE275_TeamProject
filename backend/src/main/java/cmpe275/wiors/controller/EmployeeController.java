@@ -117,6 +117,7 @@ public class EmployeeController {
         employee.setIsGoogle(is_google);
         employee.setAddress(new Address(street, city, state, zip));
         employee.setMop(attendanceRequirementService.calculateMop(employerId, null));
+        employee.setIsVerified(false);
 
         Employee newEmployee = employeeService.createEmployee(employee);
         newEmployee.setEmployer(employer.toDto());
