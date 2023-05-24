@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 /**
  * This class represent employers. It persists as an entity in the datasource.
  */
@@ -35,6 +37,14 @@ public class Employer {
 
     @Column
     private String email;
+    
+    
+    @Column(name = "is_google")
+    private boolean is_google;
+
+    @Column(name = "is_verified")
+    private boolean is_verified;
+    
 
     public Employer() {}
 
@@ -98,4 +108,22 @@ public class Employer {
     public String getEmail() {
         return email;
     }
+    
+    
+    public boolean isIsGoogle() {
+        return is_google;
+    }
+
+    public void setIsGoogle(boolean is_google) {
+        this.is_google = is_google;
+    }
+
+    public boolean isIsVerified() {
+        return is_verified;
+    }
+
+    public void setIsVerified(boolean is_verified) {
+        this.is_verified = is_verified;
+    }
+    
 }
