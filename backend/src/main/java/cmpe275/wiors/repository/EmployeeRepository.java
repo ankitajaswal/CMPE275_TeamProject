@@ -67,5 +67,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     List<Employee> getTopLevelEmployees(String employerId);
 
     Employee findByEmail(String email);
+
 }
 

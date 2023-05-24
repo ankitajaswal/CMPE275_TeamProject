@@ -36,6 +36,8 @@ public class EmployeeService {
      * @return the updated employee
      */
     public Employee updateEmployee(Employee employee) {
+        // repository.deleteById(employee.getId());
+        employee.setManagerId(employee.getManager().getId());
         return repository.save(employee);
     }
 
@@ -107,4 +109,5 @@ public class EmployeeService {
     public Employee getEmployeeByEmail(String email) {
         return repository.findByEmail(email);
     }
+
 }
