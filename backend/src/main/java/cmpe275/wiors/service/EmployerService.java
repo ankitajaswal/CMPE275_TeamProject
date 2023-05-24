@@ -1,6 +1,7 @@
 package cmpe275.wiors.service;
 
 import cmpe275.wiors.entity.Employer;
+import cmpe275.wiors.mail.MailSender;
 import cmpe275.wiors.repository.EmployerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,10 @@ public class EmployerService {
      * @param e employer to persist
      * @return persisted employer
      */
-    public Employer createEmployer(Employer e) {
-        return repository.save(e);
+    public Employer createEmployer(Employer employer) {
+    	MailSender mailSender = new MailSender();
+    	mailSender.sendActivationMail(employer.getEmail());     	    	
+        return repository.save(employer);
     }
 
     /**
