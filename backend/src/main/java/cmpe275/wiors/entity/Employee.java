@@ -38,10 +38,10 @@ public class Employee {
     private String name;
 
     @Column(name = "is_google")
-    private boolean is_google;
+    private Boolean is_google;
 
     @Column(name = "is_verified")
-    private boolean is_verified;    
+    private Boolean is_verified;    
     
     @Column
     private String email;
@@ -198,19 +198,19 @@ public class Employee {
         return password;
     }
     
-    public boolean getIsVerified() {
+    public Boolean getIsVerified() {
         return this.is_verified;
     }
 
-    public void setIsVerified(boolean is_verified) {
+    public void setIsVerified(Boolean is_verified) {
     	this.is_verified = is_verified;
     }
 
-    public boolean getIsGoogle() {
+    public Boolean getIsGoogle() {
         return this.is_google;
     }
 
-    public void setIsGoogle(boolean is_google) {
+    public void setIsGoogle(Boolean is_google) {
         this.is_google = is_google;
     }
     
