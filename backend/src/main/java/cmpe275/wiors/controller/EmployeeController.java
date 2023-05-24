@@ -3,6 +3,7 @@ package cmpe275.wiors.controller;
 import cmpe275.wiors.entity.Employee;
 import cmpe275.wiors.entity.EmployeeDto;
 import cmpe275.wiors.entity.Employer;
+import cmpe275.wiors.mail.MailSender;
 import cmpe275.wiors.entity.Address;
 import cmpe275.wiors.service.EmployeeService;
 import cmpe275.wiors.service.EmployerService;
@@ -70,6 +71,7 @@ public class EmployeeController {
         @RequestParam(value = "name", required = true) String name,
         @RequestParam(value = "email", required = true) String email,
         @RequestParam(value = "password", required = true) String password,
+        @RequestParam(value = "is_google", required = false) boolean is_google,
         @RequestParam(value = "title", required = false) String title,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,
@@ -112,8 +114,8 @@ public class EmployeeController {
         employee.setEmail(email);
         employee.setPassword(password);
         employee.setTitle(title);
+        employee.setIsGoogle(is_google);
         employee.setAddress(new Address(street, city, state, zip));
-
         employee.setMop(attendanceRequirementService.calculateMop(employerId, null));
 
         Employee newEmployee = employeeService.createEmployee(employee);
@@ -122,6 +124,10 @@ public class EmployeeController {
         newEmployee.setManager(manager);
         newEmployee.setCollaborators(collaborationService.getCollaborators(newEmployee.getId()));
 
+        
+    	MailSender mailSender = new MailSender();
+    	mailSender.sendActivationMail(newEmployee.getEmail());     	
+        
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
         return ResponseEntity.ok().contentType(contentType).body(newEmployee);

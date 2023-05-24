@@ -18,6 +18,7 @@ import org.springframework.context.annotation.DependsOn;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * This class represent employees. It persists as an entity in the datasource.
@@ -36,6 +37,12 @@ public class Employee {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "is_google")
+    private boolean is_google;
+
+    @Column(name = "is_verified")
+    private boolean is_verified;    
+    
     @Column
     private String email;
 
@@ -190,4 +197,21 @@ public class Employee {
     public String getPassword() {
         return password;
     }
+    
+    public boolean getIsVerified() {
+        return this.is_verified;
+    }
+
+    public void setIsVerified(boolean is_verified) {
+    	this.is_verified = is_verified;
+    }
+
+    public boolean getIsGoogle() {
+        return this.is_google;
+    }
+
+    public void setIsGoogle(boolean is_google) {
+        this.is_google = is_google;
+    }
+    
 }
