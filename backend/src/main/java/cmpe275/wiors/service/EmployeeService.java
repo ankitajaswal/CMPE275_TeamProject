@@ -27,8 +27,6 @@ public class EmployeeService {
      * @return the persisted employee
      */
     public Employee createEmployee(Employee employee) {    	
-    	MailSender mailSender = new MailSender();
-    	mailSender.sendActivationMail(employee.getEmail());     	
         return repository.save(employee);
     }
 
