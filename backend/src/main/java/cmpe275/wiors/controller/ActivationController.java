@@ -19,7 +19,7 @@ public class ActivationController {
 	private EmployeeService employeeService;
 
 	@RequestMapping(value = "/activate/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getEmployeeAttendanceRequirement(@PathVariable String id) {
+	public ResponseEntity<?> activateEmail(@PathVariable String id) {
 		// Perform activation logic using the provided id
 		// Replace this with your custom activation logic
 
