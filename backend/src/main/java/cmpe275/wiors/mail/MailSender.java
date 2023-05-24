@@ -1,9 +1,17 @@
 package cmpe275.wiors.mail;
 
 import javax.mail.*;
+
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+
+import cmpe275.wiors.util.*;
 
 public class MailSender {
 
@@ -11,7 +19,7 @@ public class MailSender {
     static final String password = "Test1234$#";
 
 	
-    public void sendMail(String recipient, String subject, String body) {
+    public void sendActivationMail(String recipient) {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -26,11 +34,15 @@ public class MailSender {
         });
 
         try {
+        	
+        	Activation activation = new Activation();
+        	String mailBody = "http://107.175.28.141:8080/activate?id=" + activation.encodeEmail(recipient);
+        	
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject(subject);
-            message.setText(body);
+            message.setSubject("Activation Mail");
+            message.setText(mailBody);
 
             Transport.send(message);
 
@@ -42,8 +54,7 @@ public class MailSender {
     
     public static void main(String[] args) {
     	MailSender mailSender = new MailSender();
-    	mailSender.sendMail("zaber.ahmed@gmail.com", "Hello Subject" , "Hello Body" );
-    	
+    	mailSender.sendActivationMail("zaber.ahmed@gmail.com"); 
     }
 
     
