@@ -37,8 +37,9 @@ public class EmployeeService {
      * @return the updated employee
      */
     public Employee updateEmployee(Employee employee) {
-        // repository.deleteById(employee.getId());
-        employee.setManagerId(employee.getManager().getId());
+        // repository.deleteById(employee.getId());    	
+    	if (employee.getManager() != null)
+    		employee.setManagerId(employee.getManager().getId());
         return repository.save(employee);
     }
 
