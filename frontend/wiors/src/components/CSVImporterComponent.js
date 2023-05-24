@@ -10,7 +10,8 @@ class CSVImporterComponent extends Component {
         super(props);
         this.state = {
             opType: '',
-            userRows: []
+            userRows: [],
+            seatRows:[]
         };
         this.handleOpTypeChange = this.handleOpTypeChange.bind(this);
     }
@@ -36,6 +37,7 @@ class CSVImporterComponent extends Component {
                     //      before parsing more data)
                     console.log("received batch of rows", rows);
                     this.state.userRows = rows;
+                    this.state.seatRows = rows;
 
                     // mock timeout to simulate processing
                     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -68,6 +70,20 @@ class CSVImporterComponent extends Component {
                         });
                     } else {
                         // submit 'rows' to seat reservation backend
+                        const url = global.config.url + "reservationService/bulkReservation/"
+                        + global.config.employerId ;
+                        let iterator = fetch (url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(this.state.seatRows)
+                        });
+                        iterator.then(res => {
+                            if (!res.ok) {
+                                window.confirm("Bulk seat reservation has failed!");
+                            }
+                        });
                     }
                 }}
                 onClose={() => {
