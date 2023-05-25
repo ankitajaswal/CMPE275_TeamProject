@@ -200,8 +200,8 @@ function Register() {
         <input
           type='string'
           id='managerEmail'
-          value={managerId}
-          onChange={(event) => setManagerId(event.target.value)}
+          value={managerEmail}
+          onChange={(event) => setManagerEmail(event.target.value)}
         /><br/>
       </div>}
 
