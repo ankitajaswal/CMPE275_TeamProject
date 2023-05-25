@@ -71,7 +71,7 @@ public class EmployeeController {
         @RequestParam(value = "name", required = true) String name,
         @RequestParam(value = "email", required = true) String email,
         @RequestParam(value = "password", required = true) String password,
-        @RequestParam(value = "is_google", required = false) int is_google,
+        @RequestParam(value = "is_google", required = false) Integer is_google,
         @RequestParam(value = "title", required = false) String title,
         @RequestParam(value = "street", required = false) String street,
         @RequestParam(value = "city", required = false) String city,

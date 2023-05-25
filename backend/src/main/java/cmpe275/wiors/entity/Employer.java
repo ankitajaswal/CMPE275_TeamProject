@@ -40,10 +40,10 @@ public class Employer {
     
     
     @Column(name = "is_google")
-    private int is_google;
+    private Integer is_google;
 
     @Column(name = "is_verified")
-    private int is_verified;
+    private Integer is_verified;
     
 
     public Employer() {}
@@ -110,19 +110,19 @@ public class Employer {
     }
     
     
-    public int isIsGoogle() {
+    public Integer isIsGoogle() {
         return is_google;
     }
 
-    public void setIsGoogle(int is_google) {
+    public void setIsGoogle(Integer is_google) {
         this.is_google = is_google;
     }
 
-    public int isIsVerified() {
+    public Integer isIsVerified() {
         return is_verified;
     }
 
-    public void setIsVerified(int is_verified) {
+    public void setIsVerified(Integer is_verified) {
         this.is_verified = is_verified;
     }
     
