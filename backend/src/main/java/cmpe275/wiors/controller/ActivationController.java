@@ -15,28 +15,33 @@ import cmpe275.wiors.service.*;
 @RestController
 public class ActivationController {
 
+    private static final String returnMsg = "<html><body><p>Account verified :^)</p><br><p>Click <a href=\"http://107.175.28.141/login\">here</a> to login</p></body></html>";
+
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private EmployerService employerService;
 
 	@RequestMapping(value = "/activate/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> activateEmail(@PathVariable String id) {
 		Activation activation = new Activation();
 		String emailAddress = activation.decodeEmail(id);
-        System.out.println(emailAddress);
 
 		if (emailAddress != null) {
 			Employee employee = employeeService.getEmployeeByEmail(emailAddress);
 			if (employee != null) {
-				System.err.println("Found User");
 				employee.setIsVerified(1);
 				employeeService.updateEmployee(employee);
-				return new ResponseEntity<>("<html><body>Account verified :^)</body></html>", HttpStatus.OK);				
-			} else {
-				System.err.println("User Not Found");
-				return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);								
-			}
-		} else {
-			return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);								
+				return new ResponseEntity<>(returnMsg, HttpStatus.OK);
+            } else {
+                Employer employer = employerService.getEmployerByEmail(emailAddress);
+                if (employer != null) {
+                    employer.setIsVerified(1);
+                    employerService.updateEmployer(employer);
+                    return new ResponseEntity<>(returnMsg, HttpStatus.OK);
+                }
+            }
 		}
+        return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);
 	}
 }
