@@ -8,7 +8,7 @@ function Register() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
-  const [managerId, setManagerId] = useState('');
+  const [managerEmail, setManagerEmail] = useState('');
   const [employerId, setEmployerId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,8 +55,8 @@ function Register() {
         if (title !== "") {
             url += "&title=" + title;
         }
-        if (managerId !== "") {
-            url += "&managerId=" + managerId;
+        if (managerEmail !== "") {
+            url += "&managerEmail=" + managerEmail;
         }
     }
     url += "&email=" + email
@@ -196,10 +196,10 @@ function Register() {
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         /><br/>
-        <label htmlFor='managerId'>Manager ID:</label><br/>
+        <label htmlFor='managerEmail'>Manager Email:</label><br/>
         <input
-          type='int'
-          id='managerId'
+          type='string'
+          id='managerEmail'
           value={managerId}
           onChange={(event) => setManagerId(event.target.value)}
         /><br/>

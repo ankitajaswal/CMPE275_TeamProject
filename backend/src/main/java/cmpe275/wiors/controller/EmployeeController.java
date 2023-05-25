@@ -53,6 +53,7 @@ public class EmployeeController {
      * @param state optional query parameter, state of employee's address
      * @param zip optional query parameter, zip of employee's address
      * @param managerId optional query parameter, ID of manager of this employee
+     * @param managerEmail optional query parameter, email of manager of this employee
      * @param format optional query parameter, result format type (json or xml)
      *
      * @return ResponseEntity that includes status code, employee on success, and error message on failure
@@ -78,6 +79,7 @@ public class EmployeeController {
         @RequestParam(value = "state", required = false) String state,
         @RequestParam(value = "zip", required = false) String zip,
         @RequestParam(value = "managerId", required = false) Long managerId,
+        @RequestParam(value = "managerEmail", required = false) String managerEmail,
         @RequestParam(value = "format", required = false, defaultValue = "json") String format
     ) {
         Employer employer = employerService.getEmployerById(employerId);
@@ -97,7 +99,7 @@ public class EmployeeController {
             return new ResponseEntity<>("{\"msg\":\"Duplicate email\"}", HttpStatus.BAD_REQUEST);
         }
 
-        Employee employee = new Employee();
+        Employee managerEmp, employee = new Employee();
         EmployeeDto manager = null;
         if (managerId != null) {
             manager = employeeService.getEmployeeDto(managerId);
@@ -108,7 +110,18 @@ public class EmployeeController {
                 return new ResponseEntity<>("{\"msg\":\"Manager must belong to employee's employer\"}", HttpStatus.BAD_REQUEST);
             }
             employee.setManagerId(managerId);
-        }
+        } else if (managerEmail != null) {
+            managerEmp = employeeService.getEmployeeByEmail(managerEmail);
+            if (managerEmp == null) {
+                return new ResponseEntity<>("{\"msg\":\"Invalid managerEmail\"}", HttpStatus.NOT_FOUND);
+            }
+            if (!managerEmp.getEmployerId().equals(employerId)) {
+                return new ResponseEntity<>("{\"msg\":\"Manager must belong to employee's employer\"}", HttpStatus.BAD_REQUEST);
+            }
+            manager = managerEmp.toDto();
+            employee.setManagerId(managerEmp.getId());
+        } 
+
         employee.setEmployerId(employerId);
         employee.setName(name);
         employee.setEmail(email);
