@@ -38,10 +38,10 @@ public class Employee {
     private String name;
 
     @Column(name = "is_google")
-    private int is_google;
+    private Integer is_google;
 
     @Column(name = "is_verified")
-    private int is_verified;    
+    private Integer is_verified;    
     
     @Column
     private String email;
@@ -63,7 +63,7 @@ public class Employee {
     private String password;
 
     @Column
-    private int mop;
+    private Integer mop;
 
     @Transient
     private EmployerDto employer;
@@ -182,11 +182,11 @@ public class Employee {
         return collaborators;
     }
 
-    public void setMop(int mop) {
+    public void setMop(Integer mop) {
         this.mop = mop;
     }
 
-    public int getMop() {
+    public Integer getMop() {
         return mop;
     }
 
@@ -198,19 +198,19 @@ public class Employee {
         return password;
     }
     
-    public int getIsVerified() {
+    public Integer getIsVerified() {
         return this.is_verified;
     }
 
-    public void setIsVerified(int verified) {
+    public void setIsVerified(Integer verified) {
     	this.is_verified = verified;
     }
 
-    public int getIsGoogle() {
+    public Integer getIsGoogle() {
         return this.is_google;
     }
 
-    public void setIsGoogle(int google) {
+    public void setIsGoogle(Integer google) {
         this.is_google = google;
     }
     
