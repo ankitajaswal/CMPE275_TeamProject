@@ -118,7 +118,7 @@ public class Employer {
         this.is_google = is_google;
     }
 
-    public Integer isIsVerified() {
+    public Integer isVerified() {
         return is_verified;
     }
 
