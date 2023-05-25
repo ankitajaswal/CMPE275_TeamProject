@@ -23,7 +23,7 @@ public class Activation {
             byte[] encryptedBytes = cipher.doFinal(email.getBytes(StandardCharsets.UTF_8));
 
             // Encode the encrypted bytes to a mappable string
-            return Base64.getEncoder().encodeToString(encryptedBytes);
+            return Base64.getUrlEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class Activation {
     public String decodeEmail(String encodedEmail) {
         try {
             // Decode the mappable string to encrypted bytes
-            byte[] encryptedBytes = Base64.getDecoder().decode(encodedEmail);
+            byte[] encryptedBytes = Base64.getUrlDecoder().decode(encodedEmail);
 
             // Decrypt the encrypted bytes back to the original email address
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
