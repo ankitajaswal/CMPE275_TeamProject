@@ -20,12 +20,9 @@ public class ActivationController {
 
 	@RequestMapping(value = "/activate/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> activateEmail(@PathVariable String id) {
-        System.out.println(id);
-		// Perform activation logic using the provided id
-		// Replace this with your custom activation logic
-
 		Activation activation = new Activation();
 		String emailAddress = activation.decodeEmail(id);
+        System.out.println(emailAddress);
 
 		if (emailAddress != null) {
 			Employee employee = employeeService.getEmployeeByEmail(emailAddress);
