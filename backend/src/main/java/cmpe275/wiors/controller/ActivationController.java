@@ -42,6 +42,6 @@ public class ActivationController {
                 }
             }
 		}
-        return new ResponseEntity<>("<html><body>Account Not Found :^)</body></html>", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("<html><body>Account Not Found :(</body></html>", HttpStatus.NOT_FOUND);
 	}
 }
