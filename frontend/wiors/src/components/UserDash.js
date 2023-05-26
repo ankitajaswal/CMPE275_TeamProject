@@ -4,6 +4,7 @@ import SeatReservation from './SeatReservationComponent';
 import EmployerRequirement from "./EmployerRequirement";
 import EmployeeRequirement from "./EmployeeRequirement";
 import CSVImporterComponent from './CSVImporterComponent';
+import Reservations from './Reservations.js';
 
 function UserDash() {
     console.log(global.config);
@@ -19,7 +20,8 @@ function UserDash() {
         return (
             <div>
                 <EmployeeRequirement />
-                <SeatReservation/>
+                <SeatReservation />
+                <Reservations />
             </div>
         )
     }
