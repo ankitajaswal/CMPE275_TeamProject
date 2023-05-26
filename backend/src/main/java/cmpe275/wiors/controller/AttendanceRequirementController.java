@@ -1,11 +1,15 @@
 package cmpe275.wiors.controller;
 
 import cmpe275.wiors.entity.Employer;
+import cmpe275.wiors.entity.Seat;
 import cmpe275.wiors.entity.Employee;
+import cmpe275.wiors.entity.EmployeeDto;
 import cmpe275.wiors.entity.Address;
+import cmpe275.wiors.entity.Reservation;
 import cmpe275.wiors.entity.AttendanceRequirement;
 import cmpe275.wiors.service.EmployerService;
 import cmpe275.wiors.service.EmployeeService;
+import cmpe275.wiors.service.ReservationService;
 import cmpe275.wiors.service.AttendanceRequirementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +42,9 @@ public class AttendanceRequirementController {
 
     @Autowired
     private EmployerService employerService;
+
+    @Autowired 
+    private ReservationService reservationService;
 
     @Transactional
 	@RequestMapping(
@@ -89,6 +99,45 @@ public class AttendanceRequirementController {
         }
         AttendanceRequirement created = service.createAttendanceRequirement(req);
         service.adjustMops(creator, numberOfDays);
+
+        try {
+            if (isGetTogetherDay) {
+                ArrayList<EmployeeDto> emps = new ArrayList<>();
+                try {
+                    emps.addAll(creatorEmp.getReports());
+                }catch(Exception e) {}
+                emps.add(creatorEmp.toDto());
+                for (EmployeeDto e: emps) {
+                    for (Date date: getDatesForDayOfWeek(DayOfWeek.of(dayOfWeek))) {
+                        Reservation r = new Reservation();
+                        boolean checkReserved = reservationService.checkReservationByEmployee(employer, creator, date);
+                        if (checkReserved) {
+                            continue;
+                        }
+                        List<Seat> vacantSeats = reservationService.getVacantSeats(employer, date);
+                        Seat reservedSeat = null;
+                        if (vacantSeats.size() > 0) {
+                            reservedSeat = vacantSeats.get(0);
+                        }
+                        else {
+                            List<Reservation> reservations = reservationService.getReservationsForDate(employer, date);
+                            for (Reservation rr: reservations) {
+                                int officePresence = 
+                                    reservationService.getOfficePresenceForWeekOf(employer, rr.getReservee().getId(), date);
+                                DayOfWeek day = date.toLocalDate().getDayOfWeek();
+                                boolean hasGtd = service.hasGtdOnDay(r.getReservee().getId(), day);
+                                if (officePresence > employeeService.getEmployee(e.getId()).getMop() && !hasGtd) {
+                                    reservedSeat = r.getSeat();
+                                    reservationService.deleteReservationById(employer, rr.getId());
+                                    break;
+                                }
+                            }
+                        }
+                        reservationService.createReservation(new Reservation(employerObj, employeeService.getEmployee(e.getId()), reservedSeat, date));
+                    }
+                }
+            }
+        } catch (Exception e) {}
 
         MediaType contentType = (format.equalsIgnoreCase("json")) ? 
             MediaType.APPLICATION_JSON : MediaType.APPLICATION_XML;
@@ -160,6 +209,31 @@ public class AttendanceRequirementController {
             return new ResponseEntity<>("Invalid employee ID", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(service.getEmployeeGtds(emp), HttpStatus.OK);
+    }
+
+    // @Transactional
+    // @RequestMapping(
+    //     value = "/attendance/{employerId}",
+    //     method = RequestMethod.GET
+    // )
+    // public ResponseEntity<?> getAttendanceReportingStats(
+    //     @PathVariable String employerId,
+    //     @RequestParam(value = "managerId", required = false) String managerId,
+    //     @RequestParam(value = "date", required = true) String date
+    // ) {
+    // }
+
+    public static List<Date> getDatesForDayOfWeek(DayOfWeek dayOfWeek) {
+        List<Date> dates = new ArrayList<>();
+        LocalDate currentDate = LocalDate.now();
+
+        for (int i = 0; i < 10; i++) {
+            LocalDate nextDate = currentDate.with(TemporalAdjusters.nextOrSame(dayOfWeek));
+            dates.add(Date.valueOf(nextDate));
+            currentDate = nextDate.plusWeeks(1);
+        }
+
+        return dates;
     }
 
     private boolean validStr(String str) {
